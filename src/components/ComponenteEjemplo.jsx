@@ -7,11 +7,18 @@ const ComponenteEjemplo = () => {
     console.log(message)
   }
 
-  conectarAPI()
-
   return (
     <>
-      <h2>Este es un componente de ejemplo</h2>
+      <div className='flex flex-col items-center justify-center gap-4 h-screen text-white bg-gradient-to-b from-gray-800 via-blue-600 to-blue-300'>
+        <h1 className='font-bold text-2xl'>Stockify</h1>
+        <button
+          onClick={conectarAPI}
+          className='cursor-pointer underline bg-gray-500 rounded-2xl p-2'
+        >
+          Conectar a la API del back
+        </button>
+        <p>URL de la API: {url}</p>
+      </div>
     </>
   )
 }
