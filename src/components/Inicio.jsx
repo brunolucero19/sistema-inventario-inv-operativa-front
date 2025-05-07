@@ -12,7 +12,7 @@ const Inicio = () => {
 
   return (
     <>
-      <div className='flex flex-col items-center justify-center gap-4 h-screen text-white bg-gradient-to-b from-gray-800 via-blue-600 to-blue-300'>
+      <div className='flex flex-col items-center justify-center gap-4 h-screen text-white bg-gradient-to-b from-gray-800 via-blue-600 to-blue-500'>
         <h1 className='font-bold text-3xl uppercase'>Stockify</h1>
         <Link
           to='/sistema'
