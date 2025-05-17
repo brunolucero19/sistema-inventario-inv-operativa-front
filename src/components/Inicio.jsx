@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import Button from './ui/Button'
 
 const Inicio = () => {
   const url = import.meta.env.VITE_BACKEND_URL
@@ -12,13 +13,12 @@ const Inicio = () => {
 
   return (
     <>
-      <div className='flex flex-col items-center justify-center gap-4 h-screen text-white bg-gradient-to-b from-gray-800 via-blue-600 to-blue-500'>
-        <h1 className='font-bold text-3xl uppercase'>Stockify</h1>
+      <div className='flex flex-col items-center justify-center gap-4 h-screen text-white '>
+        <h1 className='font-bold text-3xl uppercase mb-3.5'>Stockify</h1>
         <Link
           to='/sistema'
-          className='cursor-pointer underline bg-cyan-500 rounded-2xl p-2 hover:bg-gray-600 transition-colors duration-300'
         >
-          Entrar al sistema
+          <Button>Empezar</Button>
         </Link>
       </div>
     </>
