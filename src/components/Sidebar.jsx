@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const Sidebar = () => {
   const linkClass = ({ isActive }) =>
@@ -14,50 +14,50 @@ const Sidebar = () => {
             <summary>Maestro de artículos</summary>
             <ul>
               <li>
-                <NavLink to='/sistema/articulos' className={linkClass}>
+                <Link to='/sistema/articulos' className={linkClass}>
                   Administrar artículos
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to='/sistema/calcular-cgi' className={linkClass}>
+                <Link to='/sistema/calcular-cgi' className={linkClass}>
                   Calcular CGI
-                </NavLink>
+                </Link>
               </li>
               <li>
                 <details open>
                   <summary>Listados</summary>
                   <ul>
                     <li>
-                      <NavLink
+                      <Link
                         to='/sistema/articulos-a-reponer'
                         className={linkClass}
                       >
                         Artículos a reponer
-                      </NavLink>
+                      </Link>
                     </li>
                     <li>
-                      <NavLink
+                      <Link
                         to='/sistema/articulos-faltantes'
                         className={linkClass}
                       >
                         Artículos faltantes
-                      </NavLink>
+                      </Link>
                     </li>
                     <li>
-                      <NavLink
+                      <Link
                         to='/sistema/proveedores-por-articulo'
                         className={linkClass}
                       >
                         Proveedores por artículo
-                      </NavLink>
+                      </Link>
                     </li>
                   </ul>
                 </details>
               </li>
               <li>
-                <NavLink to='/sistema/ajuste-inventario' className={linkClass}>
+                <Link to='/sistema/ajuste-inventario' className={linkClass}>
                   Ajuste de inventario
-                </NavLink>
+                </Link>
               </li>
             </ul>
           </details>
@@ -67,17 +67,17 @@ const Sidebar = () => {
             <summary>Proveedores</summary>
             <ul>
               <li>
-                <NavLink to='/sistema/proveedores' className={linkClass}>
+                <Link to='/sistema/proveedores' className={linkClass}>
                   Administrar proveedores
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink
+                <Link
                   to='/sistema/articulos-por-proveedor'
                   className={linkClass}
                 >
                   Listado de artículos por proveedor
-                </NavLink>
+                </Link>
               </li>
             </ul>
           </details>
@@ -87,9 +87,9 @@ const Sidebar = () => {
             <summary>Órdenes de Compra</summary>
             <ul>
               <li>
-                <NavLink to='/sistema/ordenes-de-compra' className={linkClass}>
+                <Link to='/sistema/ordenes-de-compra' className={linkClass}>
                   Administrar órdenes de compra
-                </NavLink>
+                </Link>
               </li>
             </ul>
           </details>
@@ -99,14 +99,14 @@ const Sidebar = () => {
             <summary>Ventas</summary>
             <ul>
               <li>
-                <NavLink to='/sistema/generar-venta' className={linkClass}>
+                <Link to='/sistema/generar-venta' className={linkClass}>
                   Generar venta
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to='/sistema/listado-ventas' className={linkClass}>
+                <Link to='/sistema/listado-ventas' className={linkClass}>
                   Listado de ventas
-                </NavLink>
+                </Link>
               </li>
             </ul>
           </details>
