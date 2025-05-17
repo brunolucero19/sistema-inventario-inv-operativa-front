@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
-body.dark-theme {
+body {
   background-color: #121212;
   color: #eee;
 }
