@@ -1,10 +1,11 @@
-import { Link } from 'react-router'
+import { NavLink } from 'react-router'
 
 const Sidebar = () => {
-  const linkClass = ({ isActive }) =>
-    `transition-colors duration-200 ${
-      isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
-    }`
+    const linkClass = ({ isActive }) =>
+      `transition-colors duration-200 ${
+        isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
+      }`
+
 
   return (
     <aside className='bg-gray-900 overflow-y-auto'>
@@ -14,50 +15,50 @@ const Sidebar = () => {
             <summary>Maestro de artículos</summary>
             <ul>
               <li>
-                <Link to='/sistema/articulos' className={linkClass}>
+                <NavLink to='/sistema/articulos' className={linkClass}>
                   Administrar artículos
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to='/sistema/calcular-cgi' className={linkClass}>
+                <NavLink to='/sistema/calcular-cgi' className={linkClass}>
                   Calcular CGI
-                </Link>
+                </NavLink>
               </li>
               <li>
                 <details open>
                   <summary>Listados</summary>
                   <ul>
                     <li>
-                      <Link
+                      <NavLink
                         to='/sistema/articulos-a-reponer'
                         className={linkClass}
                       >
                         Artículos a reponer
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
+                      <NavLink
                         to='/sistema/articulos-faltantes'
                         className={linkClass}
                       >
                         Artículos faltantes
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
+                      <NavLink
                         to='/sistema/proveedores-por-articulo'
                         className={linkClass}
                       >
                         Proveedores por artículo
-                      </Link>
+                      </NavLink>
                     </li>
                   </ul>
                 </details>
               </li>
               <li>
-                <Link to='/sistema/ajuste-inventario' className={linkClass}>
+                <NavLink to='/sistema/ajuste-inventario' className={linkClass}>
                   Ajuste de inventario
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </details>
@@ -67,17 +68,17 @@ const Sidebar = () => {
             <summary>Proveedores</summary>
             <ul>
               <li>
-                <Link to='/sistema/proveedores' className={linkClass}>
+                <NavLink to='/sistema/proveedores' className={linkClass}>
                   Administrar proveedores
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to='/sistema/articulos-por-proveedor'
                   className={linkClass}
                 >
                   Listado de artículos por proveedor
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </details>
@@ -87,9 +88,9 @@ const Sidebar = () => {
             <summary>Órdenes de Compra</summary>
             <ul>
               <li>
-                <Link to='/sistema/ordenes-de-compra' className={linkClass}>
+                <NavLink to='/sistema/ordenes-de-compra' className={linkClass}>
                   Administrar órdenes de compra
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </details>
@@ -99,14 +100,14 @@ const Sidebar = () => {
             <summary>Ventas</summary>
             <ul>
               <li>
-                <Link to='/sistema/generar-venta' className={linkClass}>
+                <NavLink to='/sistema/generar-venta' className={linkClass}>
                   Generar venta
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to='/sistema/listado-ventas' className={linkClass}>
+                <NavLink to='/sistema/listado-ventas' className={linkClass}>
                   Listado de ventas
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </details>
