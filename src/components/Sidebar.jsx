@@ -1,10 +1,11 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 
 const Sidebar = () => {
-  const linkClass = ({ isActive }) =>
-    `transition-colors duration-200 ${
-      isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
-    }`
+    const linkClass = ({ isActive }) =>
+      `transition-colors duration-200 ${
+        isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
+      }`
+
 
   return (
     <aside className='bg-gray-900 overflow-y-auto'>
