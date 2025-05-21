@@ -1,9 +1,5 @@
-const Button = ({children}) =>{
-    return (
-        <button className="btn btn-soft btn-primary">
-          {children}
-        </button>  
-    );
+const Button = ({ children }) => {
+  return <button className='btn btn-soft btn-primary'>{children}</button>
 }
 
-export default Button;
+export default Button

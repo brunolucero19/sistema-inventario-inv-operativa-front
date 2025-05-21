@@ -13,7 +13,7 @@ import ListadoVentas from './ventas/ListadoVentas'
 
 const Main = () => {
   return (
-    <main className='p-4'>
+    <main className='p-4 w-full'>
       <Routes>
         <Route path='/articulos' element={<ListadoArticulos />} />
         <Route path='/calcular-cgi' element={<CalcularCGI />} />
