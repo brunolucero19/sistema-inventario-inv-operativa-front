@@ -31,12 +31,12 @@ const ListadoProveedores = () => {
     const response = await crearProveedor(data)
 
     if (response.ok) {
-      toast.success('Proveedor creado correctamente')
       form.reset()
       const modal = document.getElementById(idModal)
       if (modal) {
         modal.close()
       }
+      toast.success('Proveedor creado correctamente')
     } else {
       const error = await response.json()
       toast.error(`Error: ${error.error}`)
