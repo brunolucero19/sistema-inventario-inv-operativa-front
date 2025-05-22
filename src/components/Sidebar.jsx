@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router'
+import { useState } from 'react'
 
 const Sidebar = () => {
     const linkClass = ({ isActive }) =>
@@ -6,8 +7,21 @@ const Sidebar = () => {
         isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
       }`
 
+const [isOpen, setIsOpen] = useState(true)
+
+const AbrirSidebar = () => {
+  setIsOpen(!isOpen)
+}
 
   return (
+    <>
+    <button
+      onClick={AbrirSidebar}
+      className="m-2 p-2 text-white bg-gray-800 rounded-lg"
+      >
+      {isOpen ? 'Cerrar menú' : 'Abrir menú'}
+    </button>
+    {isOpen && (
     <aside className='bg-gray-900 overflow-y-auto'>
       <ul className='menu w-80 flex flex-col gap-2 text-base'>
         <li>
@@ -114,6 +128,9 @@ const Sidebar = () => {
         </li>
       </ul>
     </aside>
+    )}
+    </>
+
   )
 }
 
