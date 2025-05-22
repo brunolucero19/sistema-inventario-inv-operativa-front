@@ -7,7 +7,7 @@ const Sidebar = () => {
         isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
       }`
 
-const [isOpen, setIsOpen] = useState(true)
+const [isOpen, setIsOpen] = useState(false)
 
 const AbrirSidebar = () => {
   setIsOpen(!isOpen)
