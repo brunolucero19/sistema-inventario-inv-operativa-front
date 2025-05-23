@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router'
 import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
+
 
 const Sidebar = () => {
     const linkClass = ({ isActive }) =>
-      `transition-colors duration-200 ${
-        isActive ? ' bg-gray-700 font-bold' : 'text-gray-300'
+      `transition-colors duration-200 text-blue-700 ${
+        isActive ? ' bg-gray-800 ' : 'text-gray-300'
       }`
 
 const [isOpen, setIsOpen] = useState(false)
@@ -13,13 +15,17 @@ const AbrirSidebar = () => {
   setIsOpen(!isOpen)
 }
 
+  const buttonClass = isOpen
+    ? 'm-2 p-2 text-white bg-red-800 rounded-lg hover:bg-red-700'
+    : 'm-2 p-2 text-white bg-gray-800 rounded-lg hover:bg-gray-700'
+
   return (
     <>
     <button
       onClick={AbrirSidebar}
-      className="m-2 p-2 text-white bg-gray-800 rounded-lg"
+      className= {buttonClass}
       >
-      {isOpen ? 'Cerrar menú' : 'Abrir menú'}
+      {isOpen ? <X size={28} /> : <Menu size={28} />}
     </button>
     {isOpen && (
     <aside className='bg-gray-900 overflow-y-auto'>
@@ -27,7 +33,7 @@ const AbrirSidebar = () => {
         <li>
           <details open>
             <summary>Maestro de artículos</summary>
-            <ul>
+            <ul className=' border-l border-blue-700'>
               <li>
                 <NavLink to='/sistema/articulos' className={linkClass}>
                   Administrar artículos
@@ -41,7 +47,7 @@ const AbrirSidebar = () => {
               <li>
                 <details open>
                   <summary>Listados</summary>
-                  <ul>
+                  <ul className=' border-l border-blue-700'>
                     <li>
                       <NavLink
                         to='/sistema/articulos-a-reponer'
@@ -66,7 +72,7 @@ const AbrirSidebar = () => {
                         Proveedores por artículo
                       </NavLink>
                     </li>
-                  </ul>
+                  </ul >
                 </details>
               </li>
               <li>
@@ -79,8 +85,8 @@ const AbrirSidebar = () => {
         </li>
         <li>
           <details open>
-            <summary>Proveedores</summary>
-            <ul>
+            <summary className='bold'>Proveedores</summary>
+            <ul className=' border-l border-blue-700'>
               <li>
                 <NavLink to='/sistema/proveedores' className={linkClass}>
                   Administrar proveedores
@@ -100,7 +106,7 @@ const AbrirSidebar = () => {
         <li>
           <details open>
             <summary>Órdenes de Compra</summary>
-            <ul>
+            <ul className=' border-l border-blue-700'>
               <li>
                 <NavLink to='/sistema/ordenes-de-compra' className={linkClass}>
                   Administrar órdenes de compra
@@ -112,7 +118,7 @@ const AbrirSidebar = () => {
         <li>
           <details open>
             <summary>Ventas</summary>
-            <ul>
+            <ul className=' border-l border-blue-700'>
               <li>
                 <NavLink to='/sistema/generar-venta' className={linkClass}>
                   Generar venta
