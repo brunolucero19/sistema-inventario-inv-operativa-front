@@ -1,7 +1,9 @@
 import { toast } from 'react-toastify'
-import { crearArticulo } from '../../services/crearArticulo'
+import { crearArticulo, obtenerArticulos } from '../../services/articulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
+import { useState, useEffect } from 'react'
+import { Search, Edit, Trash2 } from 'lucide-react';
 
 const ListadoArticulos = () => {
   
@@ -44,8 +46,35 @@ const ListadoArticulos = () => {
     }
   }
 
+
+  //LEER
+    const [articulos, setArticulos] = useState([])
+  useEffect(() => {
+    const fetchArticulos = async () => {
+      try {
+        const data = await obtenerArticulos()
+        console.log('data:', data)
+        setArticulos(data)  // guardás la data en el estado
+      } catch (err) {
+        console.error(err.message)
+      }
+    }
+
+    fetchArticulos()
+  }, [])
+
   return (
     <div className='w-full'>
+      <div className="relative w-64">
+        <input
+          type="text"
+          className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
+          placeholder="Buscar..."
+        />
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search className="h-5 w-5 text-gray-400" />
+        </div>
+      </div>
       <div className='flex justify-end w-full'>
         <ButtonLayout onClick={() => document.getElementById(idModal).showModal()}>
           Crear artículo
@@ -92,6 +121,35 @@ const ListadoArticulos = () => {
             </div>
           </form>
         </Modal>
+      </div>
+      <div className="overflow-x-auto mt-6">
+        <table className="min-w-full border border-gray-700">
+          <thead className="bg-gray-800">
+            <tr>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Nombre</th>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Descripción</th>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Stock</th>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articulos.map((articulo) => (
+              <tr key={articulo.id_articulo} className="hover:bg-gray-700">
+                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.nombre}</td>
+                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
+                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
+                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
+                  <button className="mr-2">
+                    <Edit className="h-5 w-5 text-blue-500" />
+                  </button>
+                  <button>
+                    <Trash2 className="h-5 w-5 text-red-500" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )
