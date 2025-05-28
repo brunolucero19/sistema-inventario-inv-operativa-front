@@ -10,11 +10,13 @@ import ListadoArticulosXProveedor from './proveedores/ListadoArticulosXProveedor
 import ListadoOrdenesCompra from './ordenes/ListadoOrdenesCompra'
 import GenerarVenta from './ventas/GenerarVenta'
 import ListadoVentas from './ventas/ListadoVentas'
+import Home from './Home'
 
 const Main = () => {
   return (
     <main className='p-4 w-full'>
       <Routes>
+        <Route path='/*' element={<Home />} />
         <Route path='/articulos' element={<ListadoArticulos />} />
         <Route path='/calcular-cgi' element={<CalcularCGI />} />
         <Route
