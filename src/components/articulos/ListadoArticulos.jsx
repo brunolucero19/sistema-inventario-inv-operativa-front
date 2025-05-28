@@ -2,8 +2,9 @@ import { toast } from 'react-toastify'
 import { crearArticulo, obtenerArticulos } from '../../services/articulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
-import { useState, useEffect } from 'react'
 import { Search, Edit, Trash2 } from 'lucide-react';
+import { useFetchData } from '../../hooks/useFetchData.js'
+import { useSearchFilter } from '../../hooks/useSearchFilter.js'
 
 const ListadoArticulos = () => {
   
@@ -47,27 +48,22 @@ const ListadoArticulos = () => {
   }
 
 
-  //LEER
-    const [articulos, setArticulos] = useState([])
-  useEffect(() => {
-    const fetchArticulos = async () => {
-      try {
-        const data = await obtenerArticulos()
-        console.log('data:', data)
-        setArticulos(data)  // guardás la data en el estado
-      } catch (err) {
-        console.error(err.message)
-      }
-    }
+  //LEER TODOS
+  const { data: articulos, loading, error } = useFetchData(obtenerArticulos)
 
-    fetchArticulos()
-  }, [])
+  // FILTRO DE BUSQUEDA
+  const { query, setQuery, filteredItems } = useSearchFilter(articulos || [], 'nombre')
+
+  if (loading) return <p>Cargando...</p>
+  if (error) return <p>Error: {error.message}</p>
 
   return (
     <div className='w-full'>
       <div className="relative w-64">
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
           placeholder="Buscar..."
         />
@@ -133,7 +129,7 @@ const ListadoArticulos = () => {
             </tr>
           </thead>
           <tbody>
-            {articulos.map((articulo) => (
+            {filteredItems.map((articulo) => (
               <tr key={articulo.id_articulo} className="hover:bg-gray-700">
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.nombre}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
