@@ -122,8 +122,9 @@ const ListadoProveedores = () => {
       </div>
       <Tabla
         columns={['id_proveedor', 'nombre', 'apellido', 'email', 'telefono']}
-        data={proveedores}
-        actions={actions}
+        data={proveedores} 
+        actions={actions} 
+        filaPorPagina={8} 
       />
     </div>
   )
