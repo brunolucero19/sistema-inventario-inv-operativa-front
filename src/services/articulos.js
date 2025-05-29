@@ -1,0 +1,42 @@
+export const crearArticulo = async (articulo) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/crear-articulo`
+  console.log(url)
+
+  const data = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(articulo)
+  })
+
+  return data
+  
+}
+
+export const obtenerArticulo = async (id) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/leer-articulo/${id}` 
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  })
+
+  const data = await response.json()  
+
+  return data
+}
+
+export const obtenerArticulos = async () => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/leer-articulos` 
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  })
+
+  const data = await response.json() 
+
+  return data
+}
