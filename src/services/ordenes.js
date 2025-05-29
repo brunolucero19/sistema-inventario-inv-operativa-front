@@ -4,10 +4,9 @@ export const crearOc = async (ordencompra) => {
 
   const data = await fetch(url, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(ordencompra)
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(ordencompra),
   })
 
   return data
-  
 }

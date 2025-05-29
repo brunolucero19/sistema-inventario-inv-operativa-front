@@ -1,13 +1,13 @@
-export const crearProveedor = async (proveedor) => {
+export const crearVenta = async (venta) => {
   const URL = import.meta.env.VITE_BACKEND_URL
-  const url = `${URL}api/proveedores/crear-proveedor`
+  const url = `${URL}api/ventas/crear-venta`
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(proveedor),
+    body: JSON.stringify(venta),
   })
 
   return response

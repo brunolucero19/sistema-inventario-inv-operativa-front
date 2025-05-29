@@ -1,10 +1,27 @@
 import { toast } from 'react-toastify'
-import { crearProveedor } from '../../services/crearProveedor'
+import { crearProveedor, obtenerProveedores } from '../../services/proveedores'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
+import { useFetchData } from '../../hooks/useFetchData'
+import { TrashIcon } from 'lucide-react'
+import Tabla from '../ui/Tabla'
+import { useUpdateKeyStore } from '../../hooks/useStore'
 
 const ListadoProveedores = () => {
   const idModal = 'modal-crear-proveedor'
+
+  const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
+  const { data: proveedores } = useFetchData(obtenerProveedores, [updateKey])
+
+  // Acciones de la tabla de proveedores
+  const actions = [
+    {
+      icon: <TrashIcon className='w-5 h-5 text-red-600' />,
+      onClick: (row) => {
+        console.log('Eliminar proveedor:', row)
+      },
+    },
+  ]
 
   const handleCancel = () => {
     // Resetear el formulario
@@ -36,6 +53,7 @@ const ListadoProveedores = () => {
       if (modal) {
         modal.close()
       }
+      incrementUpdateKey() // Actualizar la clave para forzar la recarga de datos
       toast.success('Proveedor creado correctamente')
     } else {
       const error = await response.json()
@@ -45,7 +63,7 @@ const ListadoProveedores = () => {
 
   return (
     <div className='w-full'>
-      <div className='flex justify-end w-full'>
+      <div className='flex justify-end w-full mb-4'>
         <ButtonLayout
           onClick={() => document.getElementById(idModal).showModal()}
         >
@@ -102,6 +120,11 @@ const ListadoProveedores = () => {
           </form>
         </Modal>
       </div>
+      <Tabla
+        columns={['id_proveedor', 'nombre', 'apellido', 'email', 'telefono']}
+        data={proveedores}
+        actions={actions}
+      />
     </div>
   )
 }

@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 
-export function useFetchData(fetchFunction) {
-
+export function useFetchData(fetchFunction, params = []) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
-        const result = await fetchFunction()
+        const result = await fetchFunction(...params)
         setData(result)
+        setError(null)
       } catch (err) {
         setError(err)
         console.error('Error:', err.message)
@@ -20,7 +21,7 @@ export function useFetchData(fetchFunction) {
     }
 
     fetchData()
-  }, [fetchFunction])
+  }, [fetchFunction, ...params])
 
   return { data, loading, error }
 }
