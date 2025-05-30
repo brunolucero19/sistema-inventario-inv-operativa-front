@@ -5,12 +5,12 @@ export const DetalleVenta = ({ venta }) => {
 
     if (!venta) return
 
-    const detalles = venta.detalles.map((detalle, i) => ({
-            "#": i + 1,
-            descripcion: detalle.articulo.descripcion,
-            cantidad: detalle.cantidad,
-            total: detalle.totalDetalle
-        })
+    const detalles = venta.detalles.map((detalle) => ({
+        "#": detalle.id_articulo,
+        descripcion: detalle.articulo.descripcion,
+        cantidad: detalle.cantidad,
+        total: detalle.totalDetalle
+    })
 
     )
 
@@ -20,8 +20,7 @@ export const DetalleVenta = ({ venta }) => {
             <p><strong>Fecha:</strong> {new Date(venta.fechaVenta).toLocaleString()}</p>
             <p><strong>Monto Total:</strong> ${venta.montoTotal}</p>
             <div className="mt-5">
-
-                <Tabla columns={["#", "descripcion", "cantidad", "total"]} data={detalles}/>
+                <Tabla columns={["#", "descripcion", "cantidad", "total"]} data={detalles} />
             </div>
         </div>
     );

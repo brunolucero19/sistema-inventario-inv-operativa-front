@@ -6,10 +6,11 @@ import { Search, Edit, Trash2 } from 'lucide-react';
 import { useFetchData } from '../../hooks/useFetchData.js'
 import { useSearchFilter } from '../../hooks/useSearchFilter.js'
 import { useRef } from 'react';
+import { useUpdateKeyStore } from '../../hooks/useStore.js';
 
 const ListadoArticulos = () => {
-  
   const modalRef = useRef()
+  const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
 
   const handleCancel = () => {
     const form = document.getElementById('form-crear-articulo')
@@ -25,15 +26,15 @@ const ListadoArticulos = () => {
     let data = Object.fromEntries(formData.entries())
 
     data = {
-    ...data,
-    demanda_articulo: Number(data.demanda_articulo),
-    costo_almacenamiento: Number(data.costo_almacenamiento),
-    stock: Number(data.stock),
-    precioVenta: Number(data.precioVenta),
-    cgi: Number(data.cgi),
-    stock_seguridad: Number(data.stock_seguridad),
-    inventario_maximo: Number(data.inventario_maximo)
-  }
+      ...data,
+      demanda_articulo: Number(data.demanda_articulo),
+      costo_almacenamiento: Number(data.costo_almacenamiento),
+      stock: Number(data.stock),
+      precioVenta: Number(data.precioVenta),
+      cgi: Number(data.cgi),
+      stock_seguridad: Number(data.stock_seguridad),
+      inventario_maximo: Number(data.inventario_maximo)
+    }
 
     const response = await crearArticulo(data)
 
@@ -42,6 +43,7 @@ const ListadoArticulos = () => {
       const modal = modalRef.current
       if (modal) modal.close()
       toast.success('Artículo creado correctamente')
+      incrementUpdateKey()
     } else {
       const error = await response.json()
       toast.error(`Error: ${error.error}`)
@@ -50,10 +52,10 @@ const ListadoArticulos = () => {
 
 
   //LEER TODOS
-  const { data: articulos, loading, error } = useFetchData(obtenerArticulos)
+  const { data: articulos, loading, error } = useFetchData(obtenerArticulos, [updateKey])
 
   // FILTRO DE BUSQUEDA
-  const { query, setQuery, filteredItems } = useSearchFilter(articulos || [], 'nombre')
+  const { query, setQuery, filteredItems } = useSearchFilter(articulos || [], 'descripcion')
 
   if (loading) return <p>Cargando...</p>
   if (error) return <p>Error: {error.message}</p>
@@ -83,8 +85,6 @@ const ListadoArticulos = () => {
             id='form-crear-articulo'
             onSubmit={handleAddArticulo}
           >
-            <label htmlFor='nombre'>Nombre</label>
-            <input type='text' id='nombre' name='nombre' className='border border-gray-300 rounded-lg p-2' required />
 
             <label htmlFor='descripcion'>Descripción</label>
             <textarea id='descripcion' name='descripcion' className='border border-gray-300 rounded-lg p-2' required />
@@ -123,7 +123,7 @@ const ListadoArticulos = () => {
         <table className="min-w-full border border-gray-700">
           <thead className="bg-gray-800">
             <tr>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Nombre</th>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">#</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Descripción</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Stock</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Acciones</th>
@@ -132,7 +132,7 @@ const ListadoArticulos = () => {
           <tbody>
             {filteredItems.map((articulo) => (
               <tr key={articulo.id_articulo} className="hover:bg-gray-700">
-                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.nombre}</td>
+                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.id_articulo}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
