@@ -6,22 +6,57 @@ import TrashIcon from '../../../public/icons/TrashIcon'
 import { obtenerArticulos } from '../../services/articulos'
 import ListadoVentas from './ListadoVentas'
 import { useEffect, useRef, useState } from 'react'
+import { Search } from 'lucide-react'
 
 const GenerarVenta = () => {
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
   const [detalleArticulos, setDetalleArticulos] = useState([])
+  const [busqueda, setBusqueda] = useState('')
+  const [sugerencias, setSugerencias] = useState([])
   const modalRef = useRef()
 
-   useEffect(() => {
+  useEffect(() => {
     obtenerArticulos().then(setArticulosDisponibles)
   }, [])
 
-  const handleAddArticulo = () => {
-    setDetalleArticulos((prev) => [
-      ...prev,
-      { articuloId: 0, cantidad: 1, id: Date.now() },
-    ])
-  }
+  const handleAddArticulo = (articuloSeleccionado = null) => {
+    setDetalleArticulos((prev) => {
+      const articuloId = articuloSeleccionado == null ? 0 : articuloSeleccionado.id_articulo;
+
+      const existe = prev.find((a) => a.articuloId === articuloId);
+
+      if (existe) {
+        return prev.map((a) => {
+          if (a.articuloId === articuloId) {
+            const articuloData = articulosDisponibles.find(x => x.id_articulo === articuloId);
+            const max = articuloData?.stock ?? Infinity;
+
+            const nuevaCantidad = Math.min(a.cantidad + 1, max);
+
+            return {
+              ...a,
+              cantidad: nuevaCantidad,
+            };
+          }
+          return a;
+        });
+      }
+
+      return [
+        ...prev,
+        {
+          articuloId,
+          cantidad: 1,
+          id: Date.now(),
+        },
+      ];
+    });
+
+    if (articuloSeleccionado) {
+      setBusqueda('');
+      setSugerencias([]);
+    }
+  };
 
   const handleRemoveArticulo = (id) => {
     setDetalleArticulos((prev) => prev.filter((a) => a.id !== id))
@@ -44,9 +79,10 @@ const GenerarVenta = () => {
     }
 
     for (const { articuloId, cantidad } of detalleArticulos) {
-      if (!articuloId || articuloId === 0 || !cantidad || cantidad <= 0) {
-        toast.error('Completa todos los campos correctamente.')
-        return
+      const art = articulosDisponibles.find(a => a.id_articulo === articuloId);
+      if (!articuloId || articuloId === 0 || !cantidad || cantidad <= 0 || cantidad > art?.stock) {
+        toast.error('Completa todos los campos correctamente y respeta el stock');
+        return;
       }
     }
 
@@ -80,6 +116,29 @@ const GenerarVenta = () => {
     modalRef.current?.close()
   }
 
+  const handleBusquedaChange = (e) => {
+    const value = e.target.value;
+    setBusqueda(value);
+
+    if (value.trim() === '') {
+      setSugerencias([]);
+    } else {
+      const resultados = articulosDisponibles.filter((art) =>
+        art.descripcion.toLowerCase().includes(value.toLowerCase())
+      );
+      setSugerencias(resultados.slice(0, 5));
+    }
+  };
+
+  const handleSeleccionarArticulo = (articulo) => {
+    handleAddArticulo(articulo);
+    setBusqueda('');
+    setSugerencias([]);
+  };
+
+  const todosSeleccionados = articulosDisponibles.every((art) =>
+  detalleArticulos.some((a) => a.articuloId === art.id_articulo))
+
   return (
     <div className='w-full'>
       <div className='flex justify-end w-full'>
@@ -94,17 +153,50 @@ const GenerarVenta = () => {
             onSubmit={handleAddVenta}
           >
             <label>Artículos</label>
+            
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Buscar artículo..."
+                value={busqueda}
+                onChange={handleBusquedaChange}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
 
+              {sugerencias.length > 0 && (
+                <ul className="absolute bg-gray-500 text-black z-10 shadow-lg border border-gray-900 rounded w-full max-h-60 overflow-y-auto mt-1">
+                  {sugerencias.map((articulo) => (
+                    <li
+                      key={articulo.id}
+                      onClick={() => handleSeleccionarArticulo(articulo)}
+                      className="p-2 hover:bg-gray-400 cursor-pointer"
+                    >
+                      {articulo.descripcion}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            
             <ButtonLayout
-              className='border border-gray-300 rounded-lg p-2'
+              className='border border-gray-300 rounded-lg p-2 disabled:opacity-50 disabled:cursor-not-allowed'
               onClick={handleAddArticulo}
               type='button'
+              disabled={todosSeleccionados}
+              title={todosSeleccionados ? 'Ya se agregaron todos los artículos disponibles' : ''}
             >
               Agregar artículo
             </ButtonLayout>
 
             <div className='flex flex-col gap-4 max-h-64 overflow-y-auto'>
-              {detalleArticulos.map((articulo) => (
+              {detalleArticulos.map((articulo) => {
+                const articuloData = articulosDisponibles.find(a => a.id_articulo === articulo.articuloId);
+                const maxCantidad = articuloData?.stock ?? Infinity;
+                const esInvalido = articulo.cantidad > maxCantidad;
+                return (
                 <div
                   key={articulo.id}
                   className='border border-gray-300 flex flex-col gap-4 p-3 rounded-md bg-gray-800'
@@ -135,21 +227,24 @@ const GenerarVenta = () => {
                     <option value='0' className='bg-gray-400 text-black'>
                       Seleccionar artículo...
                     </option>
-                    {articulosDisponibles.map((art) => (
-                      <option
-                        key={art.id_articulo}
-                        value={art.id_articulo}
-                        className='text-black'
-                      >
-                        {art.descripcion}
-                      </option>
+                    {articulosDisponibles
+                      .filter((art) => {
+                        const yaSeleccionado = detalleArticulos.some(
+                          (a) => a.articuloId === art.id_articulo && a.id !== articulo.id
+                        );
+                        return !yaSeleccionado;
+                      })
+                      .map((art) => (
+                        <option key={art.id_articulo} value={art.id_articulo} className='text-black'>
+                          {art.descripcion}
+                        </option>
                     ))}
                   </select>
 
                   <label>Cantidad</label>
                   <input
                     type='number'
-                    className='border border-gray-300 rounded-md p-2'
+                    className={`border rounded-md p-2 ${esInvalido ? 'border-red-500' : 'border-gray-300'}`}
                     value={articulo.cantidad}
                     onChange={(e) =>
                       handleChangeArticulo(
@@ -159,8 +254,14 @@ const GenerarVenta = () => {
                       )
                     }
                   />
+                  {esInvalido && (
+                    <p className='text-red-500 text-sm'>
+                      Máximo disponible: {maxCantidad}
+                    </p>
+                  )}
                 </div>
-              ))}
+                )
+              })}
             </div>
 
             <div className='flex justify-around mt-4'>
@@ -176,7 +277,6 @@ const GenerarVenta = () => {
           </form>
         </Modal>
       </div>
-
       <ListadoVentas />
     </div>
   )
