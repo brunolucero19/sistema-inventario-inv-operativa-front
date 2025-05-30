@@ -5,15 +5,16 @@ import Modal from '../ui/Modal'
 import { Search, Edit, Trash2 } from 'lucide-react';
 import { useFetchData } from '../../hooks/useFetchData.js'
 import { useSearchFilter } from '../../hooks/useSearchFilter.js'
+import { useRef } from 'react';
 
 const ListadoArticulos = () => {
   
-  const idModal = 'modal-crear-articulo'
+  const modalRef = useRef()
 
   const handleCancel = () => {
     const form = document.getElementById('form-crear-articulo')
     if (form) form.reset()
-    const modal = document.getElementById(idModal)
+    const modal = modalRef.current
     if (modal) modal.close()
   }
 
@@ -38,7 +39,7 @@ const ListadoArticulos = () => {
 
     if (response.ok) {
       form.reset()
-      const modal = document.getElementById(idModal)
+      const modal = modalRef.current
       if (modal) modal.close()
       toast.success('Artículo creado correctamente')
     } else {
@@ -72,10 +73,10 @@ const ListadoArticulos = () => {
         </div>
       </div>
       <div className='flex justify-end w-full'>
-        <ButtonLayout onClick={() => document.getElementById(idModal).showModal()}>
+        <ButtonLayout onClick={() => modalRef.current?.showModal()}>
           Crear artículo
         </ButtonLayout>
-        <Modal id={idModal}>
+        <Modal modalRef={modalRef}>
           <h1 className='text-center font-bold uppercase'>Crear artículo</h1>
           <form
             className='flex flex-col gap-2 my-4'

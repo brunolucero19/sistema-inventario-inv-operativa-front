@@ -34,7 +34,7 @@ const ListadoVentas = () => {
   return (
     <div className="mt-10">
       <Tabla columns={["id", "fecha", "monto"]} data={ventas} actions={actions} />
-      <Modal id={"dfs"} modalRef={modalRef}>
+      <Modal modalRef={modalRef}>
         <DetalleVenta venta={activeVenta}/>
       </Modal>
     </div>

@@ -1,6 +1,6 @@
-const Modal = ({ children, id, modalRef }) => {
+const Modal = ({ children, modalRef }) => {
   return (
-    <dialog ref={modalRef} id={id} className='modal'>
+    <dialog ref={modalRef} className='modal'>
       <div className='modal-box bg-gray-800'>
         <form method='dialog'>
           {/* if there is a button in form, it will close the modal */}

@@ -6,9 +6,10 @@ import { useFetchData } from '../../hooks/useFetchData'
 import { TrashIcon } from 'lucide-react'
 import Tabla from '../ui/Tabla'
 import { useUpdateKeyStore } from '../../hooks/useStore'
+import { useRef } from 'react'
 
 const ListadoProveedores = () => {
-  const idModal = 'modal-crear-proveedor'
+  const modalRef = useRef()
 
   const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
   const { data: proveedores } = useFetchData(obtenerProveedores, [updateKey])
@@ -30,7 +31,7 @@ const ListadoProveedores = () => {
       form.reset()
     }
     // Cerrar el modal
-    const modal = document.getElementById(idModal)
+    const modal = modalRef.current
     if (modal) {
       modal.close()
     }
@@ -49,7 +50,7 @@ const ListadoProveedores = () => {
 
     if (response.ok) {
       form.reset()
-      const modal = document.getElementById(idModal)
+      const modal = modalRef.current
       if (modal) {
         modal.close()
       }
@@ -65,11 +66,11 @@ const ListadoProveedores = () => {
     <div className='w-full'>
       <div className='flex justify-end w-full mb-4'>
         <ButtonLayout
-          onClick={() => document.getElementById(idModal).showModal()}
+          onClick={() => modalRef.current?.showModal()}
         >
           Crear proveedor
         </ButtonLayout>
-        <Modal id={idModal}>
+        <Modal modalRef={modalRef}>
           <h1 className='text-center font-bold uppercase'>Crear proveedor</h1>
           <form
             className='flex flex-col gap-2 my-4'

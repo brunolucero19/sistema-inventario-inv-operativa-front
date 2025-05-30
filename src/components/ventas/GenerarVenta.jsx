@@ -6,9 +6,10 @@ import TrashIcon from '../../../public/icons/TrashIcon'
 import ReactDOM from 'react-dom/client'
 import { obtenerArticulos } from '../../services/articulos'
 import ListadoVentas from './ListadoVentas'
+import { useRef } from 'react'
 
 const GenerarVenta = () => {
-  const idModal = 'modal-crear-venta'
+  const modalRef = useRef()
 
   const handleCancel = () => {
     const form = document.getElementById('form-crear-venta')
@@ -16,7 +17,7 @@ const GenerarVenta = () => {
       form.reset()
     }
 
-    const modal = document.getElementById(idModal)
+    const modal = modalRef.current
     if (modal) {
       modal.close()
     }
@@ -153,11 +154,11 @@ const GenerarVenta = () => {
       <div className='w-full'>
         <div className='flex justify-end w-full'>
           <ButtonLayout
-            onClick={() => document.getElementById(idModal).showModal()}
+            onClick={() => modalRef.current?.showModal()}
           >
             Crear venta
           </ButtonLayout>
-          <Modal id={idModal}>
+          <Modal modalRef={modalRef}>
             <h1 className='text-center font-bold uppercase'>Crear venta</h1>
             <form
               className='flex flex-col gap-2 my-4'
