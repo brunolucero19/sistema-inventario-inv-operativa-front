@@ -1,15 +1,18 @@
 import { toast } from 'react-toastify'
-import { crearArticulo, obtenerArticulos } from '../../services/articulos'
+import { crearArticulo, modificarArticulo, obtenerArticulos } from '../../services/articulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
 import { Search, Edit, Trash2 } from 'lucide-react';
 import { useFetchData } from '../../hooks/useFetchData.js'
 import { useSearchFilter } from '../../hooks/useSearchFilter.js'
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useUpdateKeyStore } from '../../hooks/useStore.js';
+import { ModificarArticulo } from './ModificarArticulo.jsx';
 
 const ListadoArticulos = () => {
   const modalRef = useRef()
+  const editModalRef = useRef()
+  const [articuloToEdit, setArticuloToEdit] = useState(null)
   const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
 
   const handleCancel = () => {
@@ -17,6 +20,29 @@ const ListadoArticulos = () => {
     if (form) form.reset()
     const modal = modalRef.current
     if (modal) modal.close()
+  }
+
+  const onClickEdit = (articulo) => {
+    setArticuloToEdit(articulo)
+    editModalRef.current?.showModal()
+  }
+
+  const handleUpdateArticulo = async () => {
+    try{
+      const response = await modificarArticulo(articuloToEdit.id_articulo, articuloToEdit)
+
+      if(response.ok){
+        toast.success("Articulo modificado correctamente")
+        editModalRef.current?.close()
+        incrementUpdateKey()
+      }else{
+        toast.error("Error al modificar el articuo")
+      }
+
+    }catch(error){
+      console.log(error)
+      toast.error("Error al modificar el articuo")
+    }
   }
 
   const handleAddArticulo = async (e) => {
@@ -101,9 +127,6 @@ const ListadoArticulos = () => {
             <label htmlFor='precioVenta'>Precio de venta</label>
             <input type='number' step='0.01' id='precioVenta' name='precioVenta' className='border border-gray-300 rounded-lg p-2' required />
 
-            <label htmlFor='cgi'>CGI</label>
-            <input type='number' step='0.01' id='cgi' name='cgi' className='border border-gray-300 rounded-lg p-2' required />
-
             <label htmlFor='stock_seguridad'>Stock de seguridad</label>
             <input type='number' id='stock_seguridad' name='stock_seguridad' className='border border-gray-300 rounded-lg p-2' required />
 
@@ -117,6 +140,9 @@ const ListadoArticulos = () => {
               <ButtonLayout type='submit'>Crear artículo</ButtonLayout>
             </div>
           </form>
+        </Modal>
+        <Modal modalRef={editModalRef}>
+          <ModificarArticulo articulo={articuloToEdit} setArticulo={setArticuloToEdit} handleUpdate={handleUpdateArticulo}/>
         </Modal>
       </div>
       <div className="overflow-x-auto mt-6">
@@ -136,7 +162,7 @@ const ListadoArticulos = () => {
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
-                  <button className="mr-2">
+                  <button onClick={() => onClickEdit({...articulo})} className="mr-2">
                     <Edit className="h-5 w-5 text-blue-500" />
                   </button>
                   <button>
