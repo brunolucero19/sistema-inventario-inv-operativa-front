@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { crearArticulo, modificarArticulo, obtenerArticulos } from '../../services/articulos'
+import { crearArticulo, eliminarArticulo, modificarArticulo, obtenerArticulos } from '../../services/articulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
 import { Search, Edit, Trash2 } from 'lucide-react';
@@ -12,6 +12,7 @@ import { ModificarArticulo } from './ModificarArticulo.jsx';
 const ListadoArticulos = () => {
   const modalRef = useRef()
   const editModalRef = useRef()
+  const deleteModalRef = useRef()
   const [articuloToEdit, setArticuloToEdit] = useState(null)
   const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
 
@@ -25,6 +26,28 @@ const ListadoArticulos = () => {
   const onClickEdit = (articulo) => {
     setArticuloToEdit(articulo)
     editModalRef.current?.showModal()
+  }
+
+  const onClickDelete = (articulo) => {
+    setArticuloToEdit(articulo)
+    deleteModalRef.current?.showModal()
+  }
+
+  const handleDeleteArticulo = async () => {
+    try{
+      const response = await eliminarArticulo(articuloToEdit.id_articulo)
+      const data = await response.json()
+      if(response.ok){
+        toast.success("Artículo eliminado correctamente")
+        deleteModalRef.current?.close()
+        incrementUpdateKey()
+      }else{
+        toast.error(data.error)
+      }
+      } catch(error){
+        console.log(error)
+        toast.error("Error al eliminar el articulo")
+      }
   }
 
   const handleUpdateArticulo = async () => {
@@ -100,6 +123,7 @@ const ListadoArticulos = () => {
           <Search className="h-5 w-5 text-gray-400" />
         </div>
       </div>
+
       <div className='flex justify-end w-full'>
         <ButtonLayout onClick={() => modalRef.current?.showModal()}>
           Crear artículo
@@ -141,9 +165,22 @@ const ListadoArticulos = () => {
             </div>
           </form>
         </Modal>
+        
         <Modal modalRef={editModalRef}>
           <ModificarArticulo articulo={articuloToEdit} setArticulo={setArticuloToEdit} handleUpdate={handleUpdateArticulo}/>
         </Modal>
+
+        <Modal modalRef={deleteModalRef}>
+          <h1>Eliminar articulo</h1>
+          <p>¿Estas seguro de que quieres eliminar el articulo?</p>
+          <div className='flex justify-around mt-4'>
+            <ButtonLayout onClick={handleCancel} className='bg-red-500 hover:bg-red-600' type='button'>
+              Cancelar
+            </ButtonLayout>
+            <ButtonLayout onClick={handleDeleteArticulo}>Eliminar</ButtonLayout>
+          </div>
+        </Modal>
+
       </div>
       <div className="overflow-x-auto mt-6">
         <table className="min-w-full border border-gray-700">
@@ -156,17 +193,17 @@ const ListadoArticulos = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredItems.map((articulo) => (
+            {filteredItems.filter(articulo => articulo.fechaBaja === null).map((articulo) => (
               <tr key={articulo.id_articulo} className="hover:bg-gray-700">
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.id_articulo}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
-                  <button onClick={() => onClickEdit({...articulo})} className="mr-2">
-                    <Edit className="h-5 w-5 text-blue-500" />
+                  <button onClick={() => onClickEdit({...articulo})} className="mr-2" title="Editar artículo">
+                    <Edit className="h-5 w-5 text-blue-500 cursor-pointer" />
                   </button>
-                  <button>
-                    <Trash2 className="h-5 w-5 text-red-500" />
+                  <button onClick={() => onClickDelete({...articulo})} title="Eliminar artículo">
+                    <Trash2 className="h-5 w-5 text-red-500 cursor-pointer" />
                   </button>
                 </td>
               </tr>

@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <button onClick={AbrirSidebar} className={buttonClass}>
+      <button onClick={AbrirSidebar} className={`cursor-pointer ${buttonClass}`}>
         {isOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
       {isOpen && (
