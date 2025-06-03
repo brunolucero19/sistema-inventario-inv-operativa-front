@@ -29,6 +29,11 @@ const ListadoArticulos = () => {
     if (modal) modal.close()
   }
 
+  const handleCancelDelete = () => {
+    const modal = deleteModalRef.current
+    if (modal) modal.close()
+  }
+
   const onClickEdit = (articulo) => {
     setArticuloToEdit(articulo)
     editModalRef.current?.showModal()
@@ -262,7 +267,7 @@ const ListadoArticulos = () => {
           <p>¿Estas seguro de que quieres eliminar el articulo?</p>
           <div className='flex justify-around mt-4'>
             <ButtonLayout
-              onClick={handleCancel}
+              onClick={handleCancelDelete}
               className='bg-red-500 hover:bg-red-600'
               type='button'
             >
