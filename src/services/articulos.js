@@ -53,3 +53,15 @@ export const modificarArticulo = async (idArticulo, articuloModificado) => {
 
   return response
 }
+
+export const eliminarArticulo = async (idArticulo) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/eliminar-articulo/${idArticulo}`
+
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  return response
+}
