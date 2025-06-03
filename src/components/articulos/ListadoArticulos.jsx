@@ -189,6 +189,7 @@ const ListadoArticulos = () => {
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">#</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Descripción</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Stock</th>
+              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Precio</th>
               <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Acciones</th>
             </tr>
           </thead>
@@ -198,6 +199,7 @@ const ListadoArticulos = () => {
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.id_articulo}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
+                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.precioVenta}</td>
                 <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
                   <button onClick={() => onClickEdit({...articulo})} className="mr-2" title="Editar artículo">
                     <Edit className="h-5 w-5 text-blue-500 cursor-pointer" />
