@@ -5,7 +5,7 @@ const useRenderActions = (actions) => {
       return (
         <button
           key={index}
-          className='p-2 cursor-pointer'
+          className='cursor-pointer m-2'
           onClick={() => onClick(row)}
         >
           {icon}

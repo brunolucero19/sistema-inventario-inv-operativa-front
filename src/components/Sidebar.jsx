@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 const Sidebar = () => {
   const linkClass = ({ isActive }) =>
@@ -15,17 +15,28 @@ const Sidebar = () => {
   }
 
   const buttonClass = isOpen
-    ? 'm-2 p-2 text-white bg-red-800 rounded-lg hover:bg-red-700'
-    : 'm-2 p-2 text-white bg-gray-800 rounded-lg hover:bg-gray-700'
+    ? 'text-white bg-gray-800 p-2 hover:bg-gray-700'
+    : 'p-2 text-white bg-gray-800 hover:bg-gray-700'
 
   return (
     <>
-      <button onClick={AbrirSidebar} className={`cursor-pointer ${buttonClass}`}>
-        {isOpen ? <X size={28} /> : <Menu size={28} />}
+      <button
+        onClick={AbrirSidebar}
+        className={`cursor-pointer ${buttonClass}`}
+      >
+        {isOpen ? (
+          <ChevronLeftIcon size={24} />
+        ) : (
+          <ChevronRightIcon size={24} />
+        )}
       </button>
       {isOpen && (
-        <aside className='bg-gray-900 overflow-y-auto'>
-          <ul className='menu w-80 flex flex-col gap-2 text-base'>
+        <aside
+          className={`'bg-gray-900 overflow-y-auto ${
+            isOpen ? 'min-w-[250px]' : 'w-0'
+          }`}
+        >
+          <ul className='menu flex flex-col gap-2 text-base'>
             <li>
               <details open>
                 <summary>Maestro de artículos</summary>

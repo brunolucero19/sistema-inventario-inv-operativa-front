@@ -23,7 +23,7 @@ const Tabla = ({ columns, data, actions, filaPorPagina = 5 }) => {
 
   return (
     <>
-      <table className='min-w-full border border-gray-300'>
+      <table className='border border-gray-300'>
         <thead>
           <tr>
             {columns.map((header) => (
@@ -44,7 +44,10 @@ const Tabla = ({ columns, data, actions, filaPorPagina = 5 }) => {
         <tbody>
           {currentRows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length + (actions ? 1 : 0)} className='text-center py-4'>
+              <td
+                colSpan={columns.length + (actions ? 1 : 0)}
+                className='text-center py-4'
+              >
                 No hay datos
               </td>
             </tr>
@@ -57,9 +60,7 @@ const Tabla = ({ columns, data, actions, filaPorPagina = 5 }) => {
                   </td>
                 ))}
                 {actions && (
-                  <td className='px-4 py-2 border flex items-center gap-2'>
-                    {renderActions(row)}
-                  </td>
+                  <td className='px-4 py-2 border'>{renderActions(row)}</td>
                 )}
               </tr>
             ))

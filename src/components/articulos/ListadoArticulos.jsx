@@ -1,13 +1,19 @@
 import { toast } from 'react-toastify'
-import { crearArticulo, eliminarArticulo, modificarArticulo, obtenerArticulos } from '../../services/articulos'
+import {
+  crearArticulo,
+  eliminarArticulo,
+  modificarArticulo,
+  obtenerArticulos,
+} from '../../services/articulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
-import { Search, Edit, Trash2 } from 'lucide-react';
+import { Search, Edit, Trash2, Trash2Icon } from 'lucide-react'
 import { useFetchData } from '../../hooks/useFetchData.js'
 import { useSearchFilter } from '../../hooks/useSearchFilter.js'
-import { useRef, useState } from 'react';
-import { useUpdateKeyStore } from '../../hooks/useStore.js';
-import { ModificarArticulo } from './ModificarArticulo.jsx';
+import { useRef, useState } from 'react'
+import { useUpdateKeyStore } from '../../hooks/useStore.js'
+import { ModificarArticulo } from './ModificarArticulo.jsx'
+import Tabla from '../ui/Tabla.jsx'
 
 const ListadoArticulos = () => {
   const modalRef = useRef()
@@ -34,37 +40,39 @@ const ListadoArticulos = () => {
   }
 
   const handleDeleteArticulo = async () => {
-    try{
+    try {
       const response = await eliminarArticulo(articuloToEdit.id_articulo)
       const data = await response.json()
-      if(response.ok){
-        toast.success("Artículo eliminado correctamente")
+      if (response.ok) {
+        toast.success('Artículo eliminado correctamente')
         deleteModalRef.current?.close()
         incrementUpdateKey()
-      }else{
+      } else {
         toast.error(data.error)
       }
-      } catch(error){
-        console.log(error)
-        toast.error("Error al eliminar el articulo")
-      }
+    } catch (error) {
+      console.log(error)
+      toast.error('Error al eliminar el articulo')
+    }
   }
 
   const handleUpdateArticulo = async () => {
-    try{
-      const response = await modificarArticulo(articuloToEdit.id_articulo, articuloToEdit)
+    try {
+      const response = await modificarArticulo(
+        articuloToEdit.id_articulo,
+        articuloToEdit
+      )
 
-      if(response.ok){
-        toast.success("Articulo modificado correctamente")
+      if (response.ok) {
+        toast.success('Articulo modificado correctamente')
         editModalRef.current?.close()
         incrementUpdateKey()
-      }else{
-        toast.error("Error al modificar el articuo")
+      } else {
+        toast.error('Error al modificar el articuo')
       }
-
-    }catch(error){
+    } catch (error) {
       console.log(error)
-      toast.error("Error al modificar el articuo")
+      toast.error('Error al modificar el articuo')
     }
   }
 
@@ -80,9 +88,8 @@ const ListadoArticulos = () => {
       costo_almacenamiento: Number(data.costo_almacenamiento),
       stock: Number(data.stock),
       precioVenta: Number(data.precioVenta),
-      cgi: Number(data.cgi),
       stock_seguridad: Number(data.stock_seguridad),
-      inventario_maximo: Number(data.inventario_maximo)
+      inventario_maximo: Number(data.inventario_maximo),
     }
 
     const response = await crearArticulo(data)
@@ -99,28 +106,50 @@ const ListadoArticulos = () => {
     }
   }
 
-
   //LEER TODOS
-  const { data: articulos, loading, error } = useFetchData(obtenerArticulos, [updateKey])
+  const {
+    data: articulos,
+    loading,
+    error,
+  } = useFetchData(obtenerArticulos, [updateKey])
 
   // FILTRO DE BUSQUEDA
-  const { query, setQuery, filteredItems } = useSearchFilter(articulos || [], 'descripcion')
+  const { query, setQuery, filteredItems } = useSearchFilter(
+    articulos || [],
+    'descripcion'
+  )
 
   if (loading) return <p>Cargando...</p>
   if (error) return <p>Error: {error.message}</p>
 
+  // Acciones de la tabla de artículos
+  const actions = [
+    {
+      icon: <Edit className='w-5 h-5 text-blue-600' />,
+      onClick: (row) => {
+        onClickEdit(row)
+      },
+    },
+    {
+      icon: <Trash2Icon className='w-5 h-5 text-red-600' />,
+      onClick: (row) => {
+        onClickDelete(row)
+      },
+    },
+  ]
+
   return (
     <div className='w-full'>
-      <div className="relative w-64">
+      <div className='relative w-64'>
         <input
-          type="text"
+          type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
-          placeholder="Buscar..."
+          className='block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500'
+          placeholder='Buscar...'
         />
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-5 w-5 text-gray-400" />
+        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
+          <Search className='h-5 w-5 text-gray-400' />
         </div>
       </div>
 
@@ -131,87 +160,133 @@ const ListadoArticulos = () => {
         <Modal modalRef={modalRef}>
           <h1 className='text-center font-bold uppercase'>Crear artículo</h1>
           <form
-            className='flex flex-col gap-2 my-4'
+            className='flex flex-col gap-2 my-4 h-[80vh] p-1 overflow-y-auto'
             id='form-crear-articulo'
             onSubmit={handleAddArticulo}
           >
-
             <label htmlFor='descripcion'>Descripción</label>
-            <textarea id='descripcion' name='descripcion' className='border border-gray-300 rounded-lg p-2' required />
+            <textarea
+              id='descripcion'
+              name='descripcion'
+              className='border border-gray-300 rounded-lg p-2 min-h-10'
+              required
+            />
 
             <label htmlFor='demanda_articulo'>Demanda mensual</label>
-            <input type='number' id='demanda_articulo' name='demanda_articulo' className='border border-gray-300 rounded-lg p-2' required />
+            <input
+              type='number'
+              id='demanda_articulo'
+              name='demanda_articulo'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
-            <label htmlFor='costo_almacenamiento'>Costo de almacenamiento</label>
-            <input type='number' step='0.01' id='costo_almacenamiento' name='costo_almacenamiento' className='border border-gray-300 rounded-lg p-2' required />
+            <label htmlFor='costo_almacenamiento'>
+              Costo de almacenamiento
+            </label>
+            <input
+              type='number'
+              step='0.01'
+              id='costo_almacenamiento'
+              name='costo_almacenamiento'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
             <label htmlFor='stock'>Stock inicial</label>
-            <input type='number' id='stock' name='stock' className='border border-gray-300 rounded-lg p-2' required />
+            <input
+              type='number'
+              id='stock'
+              name='stock'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
             <label htmlFor='precioVenta'>Precio de venta</label>
-            <input type='number' step='0.01' id='precioVenta' name='precioVenta' className='border border-gray-300 rounded-lg p-2' required />
+            <input
+              type='number'
+              step='0.01'
+              id='precioVenta'
+              name='precioVenta'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
             <label htmlFor='stock_seguridad'>Stock de seguridad</label>
-            <input type='number' id='stock_seguridad' name='stock_seguridad' className='border border-gray-300 rounded-lg p-2' required />
+            <input
+              type='number'
+              id='stock_seguridad'
+              name='stock_seguridad'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
             <label htmlFor='inventario_maximo'>Inventario máximo</label>
-            <input type='number' id='inventario_maximo' name='inventario_maximo' className='border border-gray-300 rounded-lg p-2' required />
+            <input
+              type='number'
+              id='inventario_maximo'
+              name='inventario_maximo'
+              className='border border-gray-300 rounded-lg p-2'
+              required
+              min={0}
+            />
 
             <div className='flex justify-around mt-4'>
-              <ButtonLayout onClick={handleCancel} className='bg-red-500 hover:bg-red-600' type='button'>
+              <ButtonLayout
+                onClick={handleCancel}
+                className='bg-red-500 hover:bg-red-600'
+                type='button'
+              >
                 Cancelar
               </ButtonLayout>
               <ButtonLayout type='submit'>Crear artículo</ButtonLayout>
             </div>
           </form>
         </Modal>
-        
+
         <Modal modalRef={editModalRef}>
-          <ModificarArticulo articulo={articuloToEdit} setArticulo={setArticuloToEdit} handleUpdate={handleUpdateArticulo}/>
+          <ModificarArticulo
+            articulo={articuloToEdit}
+            setArticulo={setArticuloToEdit}
+            handleUpdate={handleUpdateArticulo}
+          />
         </Modal>
 
         <Modal modalRef={deleteModalRef}>
           <h1>Eliminar articulo</h1>
           <p>¿Estas seguro de que quieres eliminar el articulo?</p>
           <div className='flex justify-around mt-4'>
-            <ButtonLayout onClick={handleCancel} className='bg-red-500 hover:bg-red-600' type='button'>
+            <ButtonLayout
+              onClick={handleCancel}
+              className='bg-red-500 hover:bg-red-600'
+              type='button'
+            >
               Cancelar
             </ButtonLayout>
             <ButtonLayout onClick={handleDeleteArticulo}>Eliminar</ButtonLayout>
           </div>
         </Modal>
-
       </div>
-      <div className="overflow-x-auto mt-6">
-        <table className="min-w-full border border-gray-700">
-          <thead className="bg-gray-800">
-            <tr>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">#</th>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Descripción</th>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Stock</th>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Precio</th>
-              <th className="border border-gray-700 px-4 py-2 text-gray-300 text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredItems.filter(articulo => articulo.fechaBaja === null).map((articulo) => (
-              <tr key={articulo.id_articulo} className="hover:bg-gray-700">
-                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.id_articulo}</td>
-                <td className="border border-gray-700 px-4 py-2 text-gray-300">{articulo.descripcion}</td>
-                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.stock}</td>
-                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">{articulo.precioVenta}</td>
-                <td className="border border-gray-700 px-4 py-2 text-gray-300 text-center">
-                  <button onClick={() => onClickEdit({...articulo})} className="mr-2" title="Editar artículo">
-                    <Edit className="h-5 w-5 text-blue-500 cursor-pointer" />
-                  </button>
-                  <button onClick={() => onClickDelete({...articulo})} title="Eliminar artículo">
-                    <Trash2 className="h-5 w-5 text-red-500 cursor-pointer" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className='overflow-x-auto mt-6'>
+        <Tabla
+          data={filteredItems}
+          columns={[
+            'id_articulo',
+            'descripcion',
+            'stock',
+            'precioVenta',
+            'demanda_articulo',
+            'costo_almacenamiento',
+            'stock_seguridad',
+            'inventario_maximo',
+          ]}
+          actions={actions}
+        />
       </div>
     </div>
   )
