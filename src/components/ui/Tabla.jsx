@@ -23,7 +23,7 @@ const Tabla = ({ columns, data, actions, filaPorPagina = 5 }) => {
 
   return (
     <>
-      <table className='border border-gray-300'>
+      <table className='border border-gray-300 w-full'>
         <thead>
           <tr>
             {columns.map((header) => (
