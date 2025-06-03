@@ -7,6 +7,7 @@ import { obtenerArticulos } from '../../services/articulos'
 import ListadoVentas from './ListadoVentas'
 import { useEffect, useRef, useState } from 'react'
 import { Search } from 'lucide-react'
+import { useUpdateKeyStore } from '../../hooks/useStore'
 
 const GenerarVenta = () => {
   const [articulosDisponibles, setArticulosDisponibles] = useState([])
@@ -14,6 +15,8 @@ const GenerarVenta = () => {
   const [busqueda, setBusqueda] = useState('')
   const [sugerencias, setSugerencias] = useState([])
   const modalRef = useRef()
+  const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
+
 
   useEffect(() => {
     obtenerArticulos().then(setArticulosDisponibles)
@@ -104,6 +107,7 @@ const GenerarVenta = () => {
 
       toast.success('Venta creada correctamente')
       setDetalleArticulos([])
+      incrementUpdateKey()
       modalRef.current?.close()
     } catch (error) {
       console.error('Error al crear venta:', error)
@@ -137,7 +141,7 @@ const GenerarVenta = () => {
   };
 
   const todosSeleccionados = articulosDisponibles.every((art) =>
-  detalleArticulos.some((a) => a.articuloId === art.id_articulo))
+    detalleArticulos.some((a) => a.articuloId === art.id_articulo))
 
   return (
     <div className='w-full'>
@@ -153,7 +157,7 @@ const GenerarVenta = () => {
             onSubmit={handleAddVenta}
           >
             <label>Artículos</label>
-            
+
             <div className="relative w-full">
               <input
                 type="text"
@@ -180,7 +184,7 @@ const GenerarVenta = () => {
                 </ul>
               )}
             </div>
-            
+
             <ButtonLayout
               className='border border-gray-300 rounded-lg p-2 disabled:opacity-50 disabled:cursor-not-allowed'
               onClick={handleAddArticulo}
@@ -197,69 +201,69 @@ const GenerarVenta = () => {
                 const maxCantidad = articuloData?.stock ?? Infinity;
                 const esInvalido = articulo.cantidad > maxCantidad;
                 return (
-                <div
-                  key={articulo.id}
-                  className='border border-gray-300 flex flex-col gap-4 p-3 rounded-md bg-gray-800'
-                >
-                  <div className='flex justify-between items-center'>
-                    <label>Nombre artículo</label>
-                    <button
-                      type='button'
-                      className='text-red-500 hover:text-red-700'
-                      title='Eliminar artículo del detalle'
-                      onClick={() => handleRemoveArticulo(articulo.id)}
-                    >
-                      <TrashIcon className='w-5 h-5 cursor-pointer' />
-                    </button>
-                  </div>
-
-                  <select
-                    value={articulo.articuloId}
-                    onChange={(e) =>
-                      handleChangeArticulo(
-                        articulo.id,
-                        'articuloId',
-                        parseInt(e.target.value)
-                      )
-                    }
-                    className='border border-gray-300 rounded-md p-2 text-white'
+                  <div
+                    key={articulo.id}
+                    className='border border-gray-300 flex flex-col gap-4 p-3 rounded-md bg-gray-800'
                   >
-                    <option value='0' className='bg-gray-400 text-black'>
-                      Seleccionar artículo...
-                    </option>
-                    {articulosDisponibles
-                      .filter((art) => {
-                        const yaSeleccionado = detalleArticulos.some(
-                          (a) => a.articuloId === art.id_articulo && a.id !== articulo.id
-                        );
-                        return !yaSeleccionado;
-                      })
-                      .map((art) => (
-                        <option key={art.id_articulo} value={art.id_articulo} className='text-black'>
-                          {art.descripcion}
-                        </option>
-                    ))}
-                  </select>
+                    <div className='flex justify-between items-center'>
+                      <label>Nombre artículo</label>
+                      <button
+                        type='button'
+                        className='text-red-500 hover:text-red-700'
+                        title='Eliminar artículo del detalle'
+                        onClick={() => handleRemoveArticulo(articulo.id)}
+                      >
+                        <TrashIcon className='w-5 h-5 cursor-pointer' />
+                      </button>
+                    </div>
 
-                  <label>Cantidad</label>
-                  <input
-                    type='number'
-                    className={`border rounded-md p-2 ${esInvalido ? 'border-red-500' : 'border-gray-300'}`}
-                    value={articulo.cantidad}
-                    onChange={(e) =>
-                      handleChangeArticulo(
-                        articulo.id,
-                        'cantidad',
-                        parseInt(e.target.value)
-                      )
-                    }
-                  />
-                  {esInvalido && (
-                    <p className='text-red-500 text-sm'>
-                      Máximo disponible: {maxCantidad}
-                    </p>
-                  )}
-                </div>
+                    <select
+                      value={articulo.articuloId}
+                      onChange={(e) =>
+                        handleChangeArticulo(
+                          articulo.id,
+                          'articuloId',
+                          parseInt(e.target.value)
+                        )
+                      }
+                      className='border border-gray-300 rounded-md p-2 text-white'
+                    >
+                      <option value='0' className='bg-gray-400 text-black'>
+                        Seleccionar artículo...
+                      </option>
+                      {articulosDisponibles
+                        .filter((art) => {
+                          const yaSeleccionado = detalleArticulos.some(
+                            (a) => a.articuloId === art.id_articulo && a.id !== articulo.id
+                          );
+                          return !yaSeleccionado;
+                        })
+                        .map((art) => (
+                          <option key={art.id_articulo} value={art.id_articulo} className='text-black'>
+                            {art.descripcion}
+                          </option>
+                        ))}
+                    </select>
+
+                    <label>Cantidad</label>
+                    <input
+                      type='number'
+                      className={`border rounded-md p-2 ${esInvalido ? 'border-red-500' : 'border-gray-300'}`}
+                      value={articulo.cantidad}
+                      onChange={(e) =>
+                        handleChangeArticulo(
+                          articulo.id,
+                          'cantidad',
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                    {esInvalido && (
+                      <p className='text-red-500 text-sm'>
+                        Máximo disponible: {maxCantidad}
+                      </p>
+                    )}
+                  </div>
                 )
               })}
             </div>
@@ -277,7 +281,7 @@ const GenerarVenta = () => {
           </form>
         </Modal>
       </div>
-      <ListadoVentas />
+      <ListadoVentas updateKey={updateKey}/>
     </div>
   )
 }

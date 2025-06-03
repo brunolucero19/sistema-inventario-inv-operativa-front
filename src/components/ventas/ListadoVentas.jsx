@@ -6,8 +6,9 @@ import Tabla from "../ui/Tabla"
 import { useRef, useState } from "react"
 import { DetalleVenta } from "./DetalleVenta"
 
-const ListadoVentas = () => {
-  const { data } = useFetchData(obtenerVentas)
+const ListadoVentas = ({updateKey}) => {
+  console.log(updateKey)
+  const { data } = useFetchData(obtenerVentas, [updateKey])
   const [activeVenta , setActiveVenta] = useState(null)
   const modalRef = useRef()
 
