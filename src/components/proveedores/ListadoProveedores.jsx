@@ -7,12 +7,14 @@ import Tabla from '../ui/Tabla'
 import { useUpdateKeyStore } from '../../hooks/useStore'
 import { useRef } from 'react'
 import CrearProveedor from './CrearProveedor'
+import { obtenerArticulos } from '../../services/articulos'
 
 const ListadoProveedores = () => {
   const modalRef = useRef()
 
   const { updateKey } = useUpdateKeyStore()
   const { data: proveedores } = useFetchData(obtenerProveedores, [updateKey])
+  const { data: articulos } = useFetchData(obtenerArticulos)
 
   // Acciones de la tabla de proveedores
   const actions = [
@@ -27,10 +29,16 @@ const ListadoProveedores = () => {
   return (
     <div className='w-full'>
       <div className='flex justify-end w-full mb-4'>
-        <ButtonLayout onClick={() => modalRef.current?.showModal()}>
-          Crear proveedor
-        </ButtonLayout>
-        <CrearProveedor modalRef={modalRef} />
+        {articulos && articulos.length > 0 ? (
+          <>
+            <ButtonLayout onClick={() => modalRef.current?.showModal()}>
+              Crear proveedor
+            </ButtonLayout>
+            <CrearProveedor modalRef={modalRef} />
+          </>
+        ) : (
+          <p>Debe crear al menos un artículo antes de crear un proveedor</p>
+        )}
       </div>
       <Tabla
         columns={['id_proveedor', 'nombre', 'apellido', 'email', 'telefono']}
