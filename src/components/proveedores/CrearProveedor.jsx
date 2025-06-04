@@ -14,8 +14,6 @@ const CrearProveedor = ({ modalRef }) => {
 
   const [articulosSeleccionados, setArticulosSeleccionados] = useState([])
 
-  console.log(articulos)
-
   const handleCancel = () => {
     // Resetear el formulario
     const form = document.getElementById('form-crear-proveedor')
@@ -43,16 +41,11 @@ const CrearProveedor = ({ modalRef }) => {
     ])
   }
 
-  console.log(articulosSeleccionados)
-
   const handleRemoveArticulo = (index) => {
     setArticulosSeleccionados((prev) => prev.filter((_, i) => i !== index))
   }
 
   const handleArticuloChange = (index, field, value) => {
-    console.log(value)
-    console.log(field)
-
     setArticulosSeleccionados((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
     )
