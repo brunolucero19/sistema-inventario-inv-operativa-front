@@ -27,7 +27,7 @@ const AjusteInventario = () => {
 
   const onClickEdit = (articulo) => {
     setArticuloToEdit(articulo)
-    modalRef.current?.showModal()
+    modalRef.current?.show()
   }
 
   const actions = [

@@ -27,7 +27,7 @@ const ListadoVentas = ({updateKey}) => {
         console.log(row)
         const newActiveVenta = data.find(venta => venta.id_venta === row.id)
         setActiveVenta(newActiveVenta)
-        modalRef.current?.showModal()
+        modalRef.current?.show()
       },
     }
   ]

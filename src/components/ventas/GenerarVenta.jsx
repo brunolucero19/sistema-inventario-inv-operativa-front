@@ -146,7 +146,7 @@ const GenerarVenta = () => {
   return (
     <div className='w-full'>
       <div className='flex justify-end w-full'>
-        <ButtonLayout onClick={() => modalRef.current?.showModal()}>
+        <ButtonLayout onClick={() => modalRef.current?.show()}>
           Crear venta
         </ButtonLayout>
         <Modal modalRef={modalRef}>
