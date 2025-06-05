@@ -14,7 +14,7 @@ import Home from './Home'
 
 const Main = () => {
   return (
-    <main className='p-4 w-full'>
+    <main className='p-4 w-full overflow-y-auto'>
       <Routes>
         <Route path='/*' element={<Home />} />
         <Route path='/articulos' element={<ListadoArticulos />} />
