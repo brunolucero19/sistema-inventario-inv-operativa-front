@@ -23,82 +23,90 @@ const Tabla = ({ columns, data, actions, filaPorPagina = 5 }) => {
 
   return (
     <>
-      <table className='border border-gray-300 w-full'>
-        <thead>
-          <tr>
-            {columns.map((header) => (
-              <th
-                key={header}
-                className='border px-4 py-2 bg-gray-700 text-left uppercase'
-              >
-                {header}
-              </th>
-            ))}
-            {actions && (
-              <th className='border px-4 py-2 bg-gray-700 text-left uppercase'>
-                Acciones
-              </th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {currentRows.length === 0 ? (
-            <tr>
-              <td
-                colSpan={columns.length + (actions ? 1 : 0)}
-                className='text-center py-4'
-              >
-                No hay datos
-              </td>
-            </tr>
-          ) : (
-            currentRows.map((row, i) => (
-              <tr key={indexOfFirstRow + i} className='hover:bg-gray-500'>
+      {data && data.length > 0 ? (
+        <>
+          <table className='border border-gray-300 w-full'>
+            <thead>
+              <tr>
                 {columns.map((header) => (
-                  <td key={header} className='border px-4 py-2'>
-                    {row[header]}
-                  </td>
+                  <th
+                    key={header}
+                    className='border px-4 py-2 bg-gray-700 text-left uppercase'
+                  >
+                    {header}
+                  </th>
                 ))}
                 {actions && (
-                  <td className='px-4 py-2 border'>{renderActions(row)}</td>
+                  <th className='border px-4 py-2 bg-gray-700 text-left uppercase'>
+                    Acciones
+                  </th>
                 )}
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-      <div className='flex justify-center items-center gap-3 mt-4'>
-        <button
-          className='px-3 py-1 border rounded disabled:opacity-50'
-          disabled={pagina === 1}
-          onClick={() => goToPage(pagina - 1)}
-        >
-          Anterior
-        </button>
-
-        {[...Array(totalPages)].map((_, i) => {
-          const page = i + 1
-          return (
+            </thead>
+            <tbody>
+              {currentRows.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={columns.length + (actions ? 1 : 0)}
+                    className='text-center py-4'
+                  >
+                    No hay datos
+                  </td>
+                </tr>
+              ) : (
+                currentRows.map((row, i) => (
+                  <tr key={indexOfFirstRow + i} className='hover:bg-gray-500'>
+                    {columns.map((header) => (
+                      <td key={header} className='border px-4 py-2'>
+                        {row[header]}
+                      </td>
+                    ))}
+                    {actions && (
+                      <td className='px-4 py-2 border'>{renderActions(row)}</td>
+                    )}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+          <div className='flex justify-center items-center gap-3 mt-4'>
             <button
-              key={page}
-              className={`px-3 py-1 border rounded ${
-                page === pagina ? 'bg-gray-700 text-white' : ''
-              }`}
-              onClick={() => goToPage(page)}
+              className='px-3 py-1 border rounded disabled:opacity-50 cursor-pointer'
+              disabled={pagina === 1}
+              onClick={() => goToPage(pagina - 1)}
             >
-              {page}
+              Anterior
             </button>
-          )
-        })}
 
-        <button
-          className='px-3 py-1 border rounded disabled:opacity-50'
-          disabled={pagina === totalPages}
-          onClick={() => goToPage(pagina + 1)}
-        >
-          Siguiente
-        </button>
-      </div>
+            {[...Array(totalPages)].map((_, i) => {
+              const page = i + 1
+              return (
+                <button
+                  key={page}
+                  className={`px-3 py-1 border cursor-pointer rounded ${
+                    page === pagina ? 'bg-gray-700 text-white' : ''
+                  }`}
+                  onClick={() => goToPage(page)}
+                >
+                  {page}
+                </button>
+              )
+            })}
+
+            <button
+              className='px-3 py-1 border rounded disabled:opacity-50 cursor-pointer'
+              disabled={pagina === totalPages}
+              onClick={() => goToPage(pagina + 1)}
+            >
+              Siguiente
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className='text-center text-white py-4'>
+          No hay datos disponibles
+        </div>
+      )}
     </>
   )
 }

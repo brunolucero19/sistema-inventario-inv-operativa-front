@@ -28,3 +28,17 @@ export const obtenerProveedores = async () => {
 
   return data
 }
+
+export const eliminarProveedor = async (idProveedor) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/proveedores/eliminar-proveedor?id_proveedor=${idProveedor}`
+
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  return response
+}

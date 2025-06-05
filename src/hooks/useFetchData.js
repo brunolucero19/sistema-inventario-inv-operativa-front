@@ -7,8 +7,10 @@ export function useFetchData(fetchFunction, params = []) {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
+      if (!fetchFunction) return setLoading(false)
       try {
+        setLoading(true)
+
         const result = await fetchFunction(...params)
         setData(result)
         setError(null)
