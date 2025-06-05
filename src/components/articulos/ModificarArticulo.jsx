@@ -1,6 +1,6 @@
 import ButtonLayout from "../ui/ButtonLayout"
 
-export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate }) => {
+export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleCancel }) => {
   if (!articulo) return null
 
   const handleSubmit = (e) => {
@@ -92,6 +92,13 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate }) => {
         />
 
         <div className='flex justify-around mt-4'>
+          <ButtonLayout
+            onClick={handleCancel}
+            className='bg-red-500 hover:bg-red-600'
+            type='button'
+          >
+            Cancelar
+          </ButtonLayout>
           <ButtonLayout type='submit'>Modificar artículo</ButtonLayout>
         </div>
       </form>

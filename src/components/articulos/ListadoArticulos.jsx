@@ -81,6 +81,11 @@ const ListadoArticulos = () => {
     }
   }
 
+  const handleCancelEdit = () => {
+    editModalRef.current?.close()
+    setArticuloToEdit(null)
+  }
+
   const handleAddArticulo = async (e) => {
     e.preventDefault()
     const form = document.getElementById('form-crear-articulo')
@@ -259,6 +264,7 @@ const ListadoArticulos = () => {
             articulo={articuloToEdit}
             setArticulo={setArticuloToEdit}
             handleUpdate={handleUpdateArticulo}
+            handleCancel={handleCancelEdit}
           />
         </Modal>
 
