@@ -25,7 +25,7 @@ const ListadoProveedores = () => {
 
   const abrirModalEliminarProveedor = (row) => {
     setProveedorAEliminar(row)
-    modalEliminarProveedorRef.current?.showModal()
+    modalEliminarProveedorRef.current?.show()
   }
 
   const cerrarModalEliminarProveedor = () => {
@@ -64,7 +64,7 @@ const ListadoProveedores = () => {
       <div className='flex justify-end w-full mb-4'>
         {articulos && articulos.length > 0 ? (
           <>
-            <ButtonLayout onClick={() => modalRef.current?.showModal()}>
+            <ButtonLayout onClick={() => modalRef.current?.show()}>
               Crear proveedor
             </ButtonLayout>
             <CrearProveedor modalRef={modalRef} />

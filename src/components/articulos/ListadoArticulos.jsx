@@ -36,12 +36,12 @@ const ListadoArticulos = () => {
 
   const onClickEdit = (articulo) => {
     setArticuloToEdit(articulo)
-    editModalRef.current?.showModal()
+    editModalRef.current?.show()
   }
 
   const onClickDelete = (articulo) => {
     setArticuloToEdit(articulo)
-    deleteModalRef.current?.showModal()
+    deleteModalRef.current?.show()
   }
 
   const handleDeleteArticulo = async () => {
@@ -164,7 +164,7 @@ const ListadoArticulos = () => {
       </div>
 
       <div className='flex justify-end w-full'>
-        <ButtonLayout onClick={() => modalRef.current?.showModal()}>
+        <ButtonLayout onClick={() => modalRef.current?.show()}>
           Crear artículo
         </ButtonLayout>
         <Modal modalRef={modalRef}>

@@ -63,7 +63,7 @@ const ListadoArticulosXProveedor = () => {
 
   const abrirModalEditarArticulo = (articulo) => {
     setArticuloSeleccionado(articulo)
-    modalActualizarArticuloRef.current?.showModal()
+    modalActualizarArticuloRef.current?.show()
   }
 
   const cerrarModalEditarArticulo = () => {
@@ -98,7 +98,7 @@ const ListadoArticulosXProveedor = () => {
 
   const abrirModalEliminarArticulo = (articulo) => {
     setArticuloSeleccionado(articulo)
-    modalEliminarArticuloRef.current?.showModal()
+    modalEliminarArticuloRef.current?.show()
   }
 
   const cerrarModalEliminarArticulo = () => {
@@ -122,7 +122,7 @@ const ListadoArticulosXProveedor = () => {
   }
 
   const abrirModalAgregarArticulo = () => {
-    modalAgregarArticuloRef.current?.showModal()
+    modalAgregarArticuloRef.current?.show()
     // Obtener los artículos que no están asociados al proveedor seleccionado
     const articulosAsociados = articulosPorProveedor.map(
       (item) => item.id_articulo
