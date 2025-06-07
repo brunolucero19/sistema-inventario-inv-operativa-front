@@ -23,7 +23,7 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           required
         />
 
-        <label htmlFor='demanda_articulo'>Demanda mensual</label>
+        <label htmlFor='demanda_articulo'>Demanda Anual</label>
         <input
           type='number'
           id='demanda_articulo'
