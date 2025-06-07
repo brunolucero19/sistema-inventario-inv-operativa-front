@@ -48,7 +48,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <NavLink to='/sistema/calcular-cgi' className={linkClass}>
-                      Calcular CGI
+                      CGI por Articulo
                     </NavLink>
                   </li>
                   <li>

@@ -61,3 +61,16 @@ export const crearArticuloProveedor = async (data) => {
 
   return res
 }
+
+export const obtenerCGIPorArticulo = async (idArticulo) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/proveedorArticulo/obtener-cgi-articulo/${idArticulo}`
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  const data = await res.json()
+  return data
+}
