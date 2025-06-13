@@ -34,9 +34,9 @@ const CrearProveedor = ({ modalRef }) => {
         precio_unitario: 0,
         demora_entrega: 0,
         costo_pedido: 0,
-        costo_compra: 0,
         modelo_seleccionado: '',
         es_predeterminado: false,
+        periodo_revision: null,
       },
     ])
   }
@@ -91,8 +91,8 @@ const CrearProveedor = ({ modalRef }) => {
       art.precio_unitario = parseFloat(art.precio_unitario) || 0
       art.demora_entrega = parseInt(art.demora_entrega) || 0
       art.costo_pedido = parseFloat(art.costo_pedido) || 0
-      art.costo_compra = parseFloat(art.costo_compra) || 0
       art.id_articulo = parseInt(art.id_articulo) || 0
+      art.periodo_revision = parseInt(art.periodo_revision) || null
     })
 
     data.articulos = articulosSeleccionados
@@ -113,7 +113,7 @@ const CrearProveedor = ({ modalRef }) => {
   }
 
   return (
-    <Modal modalRef={modalRef}>
+    <Modal modalRef={modalRef} onClose={handleCancel}>
       <h1 className='text-center font-bold uppercase'>Crear proveedor</h1>
       <form
         className='flex flex-col gap-2 my-4'
@@ -238,18 +238,6 @@ const CrearProveedor = ({ modalRef }) => {
                   min={0}
                 />
               </div>
-              <div className='flex gap-2 items-center'>
-                <label className='w-28'>Costo compra</label>
-                <input
-                  type='number'
-                  className='flex-1 border rounded p-1'
-                  value={art.costo_compra}
-                  onChange={(e) =>
-                    handleArticuloChange(index, 'costo_compra', e.target.value)
-                  }
-                  min={0}
-                />
-              </div>
               <div className='flex gap-4 items-center'>
                 <label className=''>¿Es el proveedor predeterminado?</label>
                 <input
@@ -283,6 +271,24 @@ const CrearProveedor = ({ modalRef }) => {
                   <option value='intervalo_fijo'>Intervalo Fijo</option>
                 </select>
               </div>
+              {art.modelo_seleccionado === 'intervalo_fijo' && (
+                <div className='flex gap-2 items-center'>
+                  <label className='w-28'>Período de revisión</label>
+                  <input
+                    type='number'
+                    className='flex-1 border rounded p-1'
+                    value={art.periodo_revision}
+                    onChange={(e) =>
+                      handleArticuloChange(
+                        index,
+                        'periodo_revision',
+                        e.target.value
+                      )
+                    }
+                    min={1}
+                  />
+                </div>
+              )}
               <div className='flex justify-end'>
                 <button
                   type='button'

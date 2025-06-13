@@ -49,6 +49,7 @@ const ListadoArticulosXProveedor = () => {
             item.modelo_seleccionado === 'lote_fijo'
               ? 'Lote Fijo'
               : 'Intervalo Fijo',
+          periodo_revision: item.modeloInventario.periodo_revision || null,
         }))
       )
     }
@@ -60,6 +61,15 @@ const ListadoArticulosXProveedor = () => {
 
   const [articuloSeleccionado, setArticuloSeleccionado] = useState(null)
   const [articulosAgregables, setArticulosAgregables] = useState([])
+  const [modeloSeleccionado, setModeloSeleccionado] = useState('')
+
+  useEffect(() => {
+    if (articuloSeleccionado) {
+      setModeloSeleccionado(articuloSeleccionado.modelo_seleccionado)
+    } else {
+      setModeloSeleccionado('')
+    }
+  }, [articuloSeleccionado])
 
   const abrirModalEditarArticulo = (articulo) => {
     setArticuloSeleccionado(articulo)
@@ -76,16 +86,29 @@ const ListadoArticulosXProveedor = () => {
   const actualizarArticuloSeleccionado = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
+
+    const esPredeterminadoRaw = formData.get('es_predeterminado')
+    const modeloSeleccionadoRaw = formData.get('modelo_seleccionado')
+
     const articuloModificado = {
       id_articulo: articuloSeleccionado.id_articulo,
-      es_predeterminado: formData.get('es_predeterminado') === 'true',
-      modelo_seleccionado: formData.get('modelo_seleccionado'),
+      es_predeterminado: esPredeterminadoRaw === 'Sí',
+      modelo_seleccionado:
+        modeloSeleccionadoRaw === 'Lote Fijo' ? 'lote_fijo' : 'intervalo_fijo',
       precio_unitario: parseFloat(formData.get('precio_unitario')),
       demora_entrega: parseInt(formData.get('demora_entrega')),
       costo_pedido: parseFloat(formData.get('costo_pedido')),
       costo_compra: parseFloat(formData.get('costo_compra')),
       id_proveedor: proveedorSeleccionado,
     }
+
+    if (modeloSeleccionadoRaw === 'Intervalo Fijo') {
+      const periodoRevision = formData.get('periodo_revision')
+      articuloModificado.periodo_revision = periodoRevision
+        ? parseInt(periodoRevision)
+        : null
+    }
+
     const response = await actualizarArticuloProveedor(articuloModificado)
     if (response.ok) {
       toast.success('Artículo actualizado correctamente')
@@ -171,11 +194,19 @@ const ListadoArticulosXProveedor = () => {
       id_articulo: parseInt(articuloSeleccionado),
       id_proveedor: proveedorSeleccionado,
       es_predeterminado: formData.get('es_predeterminado') === 'true',
-      modelo_seleccionado: formData.get('modelo_seleccionado'),
+      modelo_seleccionado:
+        modeloInventario === 'Lote Fijo' ? 'lote_fijo' : 'intervalo_fijo',
       precio_unitario: parseFloat(formData.get('precio_unitario')),
       demora_entrega: parseInt(formData.get('demora_entrega')),
       costo_pedido: parseFloat(formData.get('costo_pedido')),
       costo_compra: parseFloat(formData.get('costo_compra')),
+    }
+
+    if (modeloInventario === 'Intervalo Fijo') {
+      const periodoRevision = formData.get('periodo_revision')
+      nuevoArticulo.periodo_revision = periodoRevision
+        ? parseInt(periodoRevision)
+        : null
     }
     const response = await crearArticuloProveedor(nuevoArticulo)
     if (response.ok) {
@@ -254,7 +285,10 @@ const ListadoArticulosXProveedor = () => {
           actions={acciones}
         />
       </div>
-      <Modal modalRef={modalActualizarArticuloRef}>
+      <Modal
+        modalRef={modalActualizarArticuloRef}
+        onClose={cerrarModalEditarArticulo}
+      >
         {articuloSeleccionado && (
           <div className='max-h-[90vh] overflow-y-auto'>
             <h2 className='text-center uppercase font-bold mb-4'>
@@ -279,8 +313,8 @@ const ListadoArticulosXProveedor = () => {
                 className='border border-gray-300 bg-gray-800 rounded-lg p-2'
                 required
               >
-                <option value='true'>Sí</option>
-                <option value='false'>No</option>
+                <option value='Sí'>Sí</option>
+                <option value='No'>No</option>
               </select>
               <label htmlFor='modelo_seleccionado'>Modelo de inventario</label>
               <select
@@ -289,10 +323,27 @@ const ListadoArticulosXProveedor = () => {
                 defaultValue={articuloSeleccionado.modelo_seleccionado}
                 className='border border-gray-300 bg-gray-800 rounded-lg p-2'
                 required
+                onChange={(e) => setModeloSeleccionado(e.target.value)}
               >
-                <option value='lote_fijo'>Lote Fijo</option>
-                <option value='intervalo_fijo'>Intervalo Fijo</option>
+                <option value='Lote Fijo'>Lote Fijo</option>
+                <option value='Intervalo Fijo'>Intervalo Fijo</option>
               </select>
+              {modeloSeleccionado === 'Intervalo Fijo' && (
+                <>
+                  <label htmlFor='periodo_revision'>
+                    Período de revisión (en días)
+                  </label>
+                  <input
+                    type='number'
+                    id='periodo_revision'
+                    name='periodo_revision'
+                    defaultValue={articuloSeleccionado.periodo_revision}
+                    className='border border-gray-300 rounded-lg p-2'
+                    required
+                    min={0}
+                  />
+                </>
+              )}
               <label htmlFor='precio_unitario'>Precio unitario</label>
               <input
                 type='number'
@@ -438,11 +489,27 @@ const ListadoArticulosXProveedor = () => {
               name='modelo_seleccionado'
               className='border border-gray-300 bg-gray-800 rounded-lg p-2'
               required
+              onChange={(e) => setModeloSeleccionado(e.target.value)}
             >
               <option value=''>Seleccione un modelo</option>
-              <option value='lote_fijo'>Lote Fijo</option>
-              <option value='intervalo_fijo'>Intervalo Fijo</option>
+              <option value='Lote Fijo'>Lote Fijo</option>
+              <option value='Intervalo Fijo'>Intervalo Fijo</option>
             </select>
+            {modeloSeleccionado === 'Intervalo Fijo' && (
+              <>
+                <label htmlFor='periodo_revision'>
+                  Período de revisión (en días)
+                </label>
+                <input
+                  type='number'
+                  id='periodo_revision'
+                  name='periodo_revision'
+                  className='border border-gray-300 rounded-lg p-2'
+                  required
+                  min={0}
+                />
+              </>
+            )}
             <label htmlFor='precio_unitario'>Precio unitario</label>
             <input
               type='number'
