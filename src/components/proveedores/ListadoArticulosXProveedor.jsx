@@ -35,6 +35,7 @@ const ListadoArticulosXProveedor = () => {
       setMappedArticulos([])
       return
     }
+    console.log('articulosPorProveedor', articulosPorProveedor)
     if (articulosPorProveedor && articulosPorProveedor.length > 0) {
       setMappedArticulos(
         articulosPorProveedor.map((item) => ({
@@ -45,6 +46,7 @@ const ListadoArticulosXProveedor = () => {
           costo_pedido: item.costo_pedido,
           costo_compra: item.costo_compra,
           es_predeterminado: item.es_predeterminado ? 'Sí' : 'No',
+          nivel_servicio: item.nivel_servicio,
           modelo_seleccionado:
             item.modelo_seleccionado === 'lote_fijo'
               ? 'Lote Fijo'
@@ -198,6 +200,7 @@ const ListadoArticulosXProveedor = () => {
         modeloInventario === 'Lote Fijo' ? 'lote_fijo' : 'intervalo_fijo',
       precio_unitario: parseFloat(formData.get('precio_unitario')),
       demora_entrega: parseInt(formData.get('demora_entrega')),
+      nivel_servicio: parseInt(formData.get('nivel_servicio')),
       costo_pedido: parseFloat(formData.get('costo_pedido')),
       costo_compra: parseFloat(formData.get('costo_compra')),
     }
@@ -208,6 +211,7 @@ const ListadoArticulosXProveedor = () => {
         ? parseInt(periodoRevision)
         : null
     }
+    console.log('nuevoArticulo', nuevoArticulo)
     const response = await crearArticuloProveedor(nuevoArticulo)
     if (response.ok) {
       toast.success('Relación agregada correctamente')
@@ -280,6 +284,7 @@ const ListadoArticulosXProveedor = () => {
             'costo_pedido',
             'costo_compra',
             'es_predeterminado',
+            'nivel_servicio',
             'modelo_seleccionado',
           ]}
           actions={acciones}
@@ -316,6 +321,22 @@ const ListadoArticulosXProveedor = () => {
                 <option value='Sí'>Sí</option>
                 <option value='No'>No</option>
               </select>
+
+              <label htmlFor='nivel_servicio'>
+                Nivel de Servicio
+              </label>
+              <select
+                id='nivel_servicio'
+                name='nivel_servicio'
+                defaultValue={articuloSeleccionado.nivel_servicio}
+                className='border border-gray-300 bg-gray-800 rounded-lg p-2'
+                required
+              >
+                <option value='85'>85%</option>
+                <option value='90'>90%</option>
+                <option value='95'>95%</option>
+              </select>
+
               <label htmlFor='modelo_seleccionado'>Modelo de inventario</label>
               <select
                 id='modelo_seleccionado'
@@ -483,6 +504,22 @@ const ListadoArticulosXProveedor = () => {
               <option value='true'>Sí</option>
               <option value='false'>No</option>
             </select>
+
+            <label htmlFor='nivel_servicio'>
+              Nivel de Servicio
+            </label>
+            <select
+              id='nivel_servicio'
+              name='nivel_servicio'
+              className='border border-gray-300 bg-gray-800 rounded-lg p-2'
+              required
+            >
+              <option value=''>Seleccione una opción</option>
+              <option value='85'>85%</option>
+              <option value='90'>90%</option>
+              <option value='95'>95%</option>
+            </select>
+
             <label htmlFor='modelo_seleccionado'>Modelo de inventario</label>
             <select
               id='modelo_seleccionado'

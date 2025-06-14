@@ -69,13 +69,13 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           required
         />
 
-        <label htmlFor='stock_seguridad'>Stock de seguridad</label>
+        <label htmlFor='desviacion_est_dem'>Desviación Estandar de la Demanda</label>
         <input
           type='number'
-          id='stock_seguridad'
-          name='stock_seguridad'
-          value={articulo.stock_seguridad}
-          onChange={e => setArticulo({ ...articulo, stock_seguridad: +e.target.value })}
+          id='desviacion_est_dem'
+          name='desviacion_est_dem'
+          value={articulo.desviacion_est_dem}
+          onChange={e => setArticulo({ ...articulo, desviacion_est_dem: +e.target.value })}
           className='border border-gray-300 rounded-lg p-2'
           required
         />
