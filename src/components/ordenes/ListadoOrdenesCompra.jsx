@@ -31,7 +31,9 @@ const ListadoOrdenesCompra = () => {
             >
               <h3 className="text-xl font-bold text-gray-800 mb-2">Orden #{orden.id_orden_compra}</h3>
               <p className="text-gray-700"><strong>Proveedor:</strong> {orden.proveedorArticulo.proveedor.nombre}</p>
-              {/* Cambiar lo del proveedor */}
+
+              <p className="text-gray-700"><strong>Artículo:</strong> {orden.proveedorArticulo.articulo.descripcion}</p>
+
               <p className="text-gray-700"><strong>Fecha estimada:</strong> {new Date(orden.fecha_estimada_recepcion).toLocaleDateString()}</p>
 
               <p className="text-gray-700"><strong>Estado:</strong> {orden.estadoOrdenCompra.nombre_eoc.toUpperCase()}</p>
