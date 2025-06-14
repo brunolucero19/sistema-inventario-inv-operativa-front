@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { SearchBar } from '../ui/SearchBar'
 import { useFetchData } from '../../hooks/useFetchData'
 import { obtenerProveedores } from '../../services/proveedores'
@@ -16,6 +16,10 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     const [proveedorArticulos, setProveedorArticulos] = useState([])
     const { data: proveedores } = useFetchData(obtenerProveedores)
 
+    const proveedorArticuloSeleccionado = useMemo(() => {
+        return proveedorArticulos.find(pa => pa.articulo.id_articulo === articuloSeleccionado?.id_articulo && pa.proveedor.id_proveedor === proveedorSeleccionado?.id_proveedor)
+    }, [articuloSeleccionado, proveedorSeleccionado, proveedorArticulos])
+
     const { incrementUpdateKey } = useUpdateKeyStore()
 
     const handleClickOpcion = (proveedor) => {
@@ -26,6 +30,8 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     const handleChangeSelectProveedor = (id) => {
         const proveedor = proveedores.find(p => p.id_proveedor === id);
         setProveedorSeleccionado(proveedor);
+        setArticuloSeleccionado(null);
+        setCantidad(1);
     }
 
     const handleChangeSelectArticulo = (id) => {
@@ -39,9 +45,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
             return;
         }
 
-        const proveedorArticulo = proveedorArticulos.find(pa => pa.articulo.id_articulo === articuloSeleccionado.id_articulo && pa.proveedor.id_proveedor === proveedorSeleccionado.id_proveedor);
-        console.log(proveedorArticulo.id_proveedor_articulo)
-        const response = await crearOc({ id_proveedor_articulo: proveedorArticulo.id_proveedor_articulo, cantidad })
+        const response = await crearOc({ id_proveedor_articulo: proveedorArticuloSeleccionado.id_proveedor_articulo, cantidad })
 
         if (response.ok) {
             toast.success('Orden de compra generada correctamente');
@@ -52,7 +56,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
             setArticulos([]);
             setProveedorArticulos([]);
             incrementUpdateKey();
-        }else{
+        } else {
             toast.error('Error al generar la orden de compra');
         }
     }
@@ -68,7 +72,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     }, [proveedorSeleccionado]);
 
     return (
-        <div className='h-140 flex flex-col gap-4'>
+        <div className='flex flex-col gap-4'>
             <h2 className="text-xl text-center font-bold">Generar Orden de Compra</h2>
             <div className='flex h-full flex-col gap-4 mt-4'>
                 <SearchBar data={proveedores} placeholder="Buscar proveedor..." atributo="nombre" onClickOpcion={handleClickOpcion} />
@@ -90,7 +94,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                         </option>
                     ))}
                 </select>
-  
+
                 {articulos.length > 0 ? (
                     <div className='mt-4 flex flex-col gap-4 border border-gray-300 rounded p-4'>
                         <SearchBar data={articulos} placeholder="Buscar articulo..." atributo="descripcion" onClickOpcion={setArticuloSeleccionado} />
@@ -124,6 +128,14 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                                     onChange={(e) => setCantidad(+e.target.value)}
                                     min={1}
                                 />
+                                <div>
+                                    <p className='text-white mt-2'>Costo Pedido: ${proveedorArticuloSeleccionado?.costo_pedido}</p>
+
+                                    <p className='text-white mt-2'>Precio Unitario: ${proveedorArticuloSeleccionado?.precio_unitario}</p>
+
+                                    <p className='text-white font-bold mt-2'>Total: ${proveedorArticuloSeleccionado?.precio_unitario * cantidad}</p>
+                                </div>
+
 
                             </>
                         )}
@@ -135,7 +147,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                     )
                 )}
             </div>
-            <ButtonLayout type='button' className={"mt-auto"} onClick={handleGenerarOrden}>Generar Orden</ButtonLayout>
+            <ButtonLayout type='button' onClick={handleGenerarOrden}>Generar Orden</ButtonLayout>
         </div>
     )
 }
