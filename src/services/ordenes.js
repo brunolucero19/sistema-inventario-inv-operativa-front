@@ -1,6 +1,6 @@
 export const crearOc = async (ordencompra) => {
   const URL = import.meta.env.VITE_BACKEND_URL
-  const url = `${URL}api/ordenCompra/crear-ordencompra`
+  const url = `${URL}api/ordenCompra/crear-orden-compra`
 
   const data = await fetch(url, {
     method: 'POST',
