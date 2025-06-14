@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { obtenerOrdenesCompra } from "../../services/ordenes"
 import Modal from "../ui/Modal"
 import { SearchBar } from "../ui/SearchBar"
@@ -6,17 +6,42 @@ import { CrearOrdenCompra } from "./CrearOrdenCompra"
 import ButtonLayout from "../ui/ButtonLayout"
 import { useFetchData } from "../../hooks/useFetchData"
 import { useUpdateKeyStore } from "../../hooks/useStore"
+import { OrdenCard } from "./OrdenCard"
 
 const ListadoOrdenesCompra = () => {
   const createModalRef = useRef()
+  const [filter, setFilter] = useState("")
+  const [ordenSeleccionada, setOrdenSeleccionada] = useState(null)
 
   const { updateKey } = useUpdateKeyStore()
 
   const { data: ordenes } = useFetchData(obtenerOrdenesCompra, [updateKey])
 
+  const filteredOrdenes = useMemo(() => ordenes.filter(orden => {
+    if (filter.length === 0) return true
+    console.log(orden)
+    return orden.id_estado_orden_compra === +filter
+  }), [ordenes, filter])
+
+  const handleClickOrden = (orden) => {
+    setOrdenSeleccionada({ ...orden })
+  }
+
   return (
     <>
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <label>Filtrar por estado:</label>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)} className='border border-gray-300 bg-gray-700 rounded-md p-2 text-white'>
+            <option value="" className='bg-gray-400 text-black'>Todos</option>
+            <option value="1" className='bg-gray-400 text-black'>Pendiente</option>
+            <option value="2" className='bg-gray-400 text-black'>Cancelada</option>
+            <option value="3" className='bg-gray-400 text-black'>Enviada</option>
+            <option value="4" className='bg-gray-400 text-black'>Finalizada</option>
+
+          </select>
+        </div>
+
         <ButtonLayout className={"ml-auto"} onClick={() => createModalRef.current?.show()}>
           Crear Orden de Compra
         </ButtonLayout>
@@ -24,20 +49,12 @@ const ListadoOrdenesCompra = () => {
 
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {
-          ordenes.map((orden) => (
-            <div
+          filteredOrdenes.map((orden) => (
+            <OrdenCard
               key={orden.id_orden_compra}
-              className="bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-transform hover:scale-105 hover:shadow-lg"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Orden #{orden.id_orden_compra}</h3>
-              <p className="text-gray-700"><strong>Proveedor:</strong> {orden.proveedorArticulo.proveedor.nombre}</p>
-
-              <p className="text-gray-700"><strong>Artículo:</strong> {orden.proveedorArticulo.articulo.descripcion}</p>
-
-              <p className="text-gray-700"><strong>Fecha estimada:</strong> {new Date(orden.fecha_estimada_recepcion).toLocaleDateString()}</p>
-
-              <p className="text-gray-700"><strong>Estado:</strong> {orden.estadoOrdenCompra.nombre_eoc.toUpperCase()}</p>
-            </div>
+              orden={orden}
+              onClick={handleClickOrden}
+            />
           ))
         }
       </div>
