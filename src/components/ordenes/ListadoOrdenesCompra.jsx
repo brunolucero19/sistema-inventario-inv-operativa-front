@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react"
-import { obtenerOrdenesCompra } from "../../services/ordenes"
+import { modificarOc, obtenerOrdenesCompra } from "../../services/ordenes"
 import Modal from "../ui/Modal"
 import { SearchBar } from "../ui/SearchBar"
 import { CrearOrdenCompra } from "./CrearOrdenCompra"
@@ -7,13 +7,16 @@ import ButtonLayout from "../ui/ButtonLayout"
 import { useFetchData } from "../../hooks/useFetchData"
 import { useUpdateKeyStore } from "../../hooks/useStore"
 import { OrdenCard } from "./OrdenCard"
+import { ModificarOrdenCompra } from "./ModificarOrdenCompra"
+import { toast } from "react-toastify"
 
 const ListadoOrdenesCompra = () => {
   const createModalRef = useRef()
+  const editModalRef = useRef()
   const [filter, setFilter] = useState("")
   const [ordenSeleccionada, setOrdenSeleccionada] = useState(null)
 
-  const { updateKey } = useUpdateKeyStore()
+  const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
 
   const { data: ordenes } = useFetchData(obtenerOrdenesCompra, [updateKey])
 
@@ -25,6 +28,28 @@ const ListadoOrdenesCompra = () => {
 
   const handleClickOrden = (orden) => {
     setOrdenSeleccionada({ ...orden })
+    editModalRef.current?.show()
+  }
+
+  const handleModificarOrden = async (orden) => {
+    if (!orden) return null
+
+    const response = await modificarOc(orden)
+
+    if (response.ok) {
+      toast.success('Orden de compra modificada correctamente')
+      editModalRef.current?.close()
+      setOrdenSeleccionada(null)
+      incrementUpdateKey()
+    } else {
+      console.log(await response.json())
+      toast.error('Error al modificar la orden de compra')
+    }
+  }
+
+  const handleCancelarOrden = () => {
+    setOrdenSeleccionada(null)
+    editModalRef.current?.close()
   }
 
   return (
@@ -60,6 +85,10 @@ const ListadoOrdenesCompra = () => {
       </div>
       <Modal modalRef={createModalRef}>
         <CrearOrdenCompra modalRef={createModalRef} />
+      </Modal >
+
+      <Modal modalRef={editModalRef}>
+        <ModificarOrdenCompra orden={ordenSeleccionada} onSubmit={handleModificarOrden} onCancel={handleCancelarOrden} />
       </Modal >
     </>
   )
