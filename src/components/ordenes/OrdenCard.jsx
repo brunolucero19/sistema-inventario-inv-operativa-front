@@ -7,7 +7,7 @@ export const OrdenCard = ({ orden, onClick}) => {
             className="bg-white rounded-xl cursor-pointer shadow-md border border-gray-200 p-6 transition-transform hover:scale-105 hover:shadow-lg"
         >
             <h3 className="text-xl font-bold text-gray-800 mb-2">Orden #{orden.id_orden_compra}</h3>
-            <p className="text-gray-700"><strong>Proveedor:</strong> {orden.proveedorArticulo.proveedor.nombre}</p>
+            <p className="text-gray-700"><strong>Proveedor:</strong> {orden.proveedorArticulo.proveedor.apellido} {orden.proveedorArticulo.proveedor.nombre}</p>
 
             <p className="text-gray-700"><strong>Artículo:</strong> {orden.proveedorArticulo.articulo.descripcion}</p>
 

@@ -65,7 +65,7 @@ export const ModificarOrdenCompra = ({ orden, onSubmit, onCancel }) => {
             <form onSubmit={handleSubmit} className='flex flex-col gap-2 my-4'>
 
                 <p><strong>ID:</strong> {localOrden.id_orden_compra}</p>
-                <p><strong>Proveedor:</strong> {localOrden.proveedorArticulo.proveedor.nombre}</p>
+                <p><strong>Proveedor:</strong> {localOrden.proveedorArticulo.proveedor.apellido} {localOrden.proveedorArticulo.proveedor.nombre}</p>
                 <p><strong>Artículo:</strong> {localOrden.proveedorArticulo.articulo.descripcion}</p>
                 <p><strong>Fecha estimada:</strong> {new Date(localOrden.fecha_estimada_recepcion).toLocaleDateString()}</p>
 
