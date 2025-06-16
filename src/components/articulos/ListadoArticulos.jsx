@@ -98,7 +98,7 @@ const ListadoArticulos = () => {
       costo_almacenamiento: Number(data.costo_almacenamiento),
       stock: Number(data.stock),
       precioVenta: Number(data.precioVenta),
-      stock_seguridad: Number(data.stock_seguridad),
+      desviacion_est_dem: Number(data.desviacion_est_dem),
       inventario_maximo: Number(data.inventario_maximo),
     }
 
@@ -226,11 +226,12 @@ const ListadoArticulos = () => {
               min={0}
             />
 
-            <label htmlFor='stock_seguridad'>Stock de seguridad</label>
+            <label htmlFor='desviacion_est_dem'>Desviación Estandar de la Demanda</label>
             <input
-              type='number'
-              id='stock_seguridad'
-              name='stock_seguridad'
+              type='float'
+              step="any"
+              id='desviacion_est_dem'
+              name='desviacion_est_dem'
               className='border border-gray-300 rounded-lg p-2'
               required
               min={0}
@@ -293,7 +294,7 @@ const ListadoArticulos = () => {
             'precioVenta',
             'demanda_articulo',
             'costo_almacenamiento',
-            'stock_seguridad',
+            'desviacion_est_dem',
             'inventario_maximo',
           ]}
           actions={actions}
