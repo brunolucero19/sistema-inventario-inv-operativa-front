@@ -41,3 +41,16 @@ export const modificarOc = async (ordencompra) => {
   return data
 }
 
+
+export const obtenerOcActiva = async (id_articulo) => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/ordenCompra/obtener-orden-compra-activa-por-articulo/${id_articulo}`
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  return res
+}
+

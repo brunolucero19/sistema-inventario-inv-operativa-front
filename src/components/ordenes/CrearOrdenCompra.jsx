@@ -1,46 +1,39 @@
 import { useEffect, useMemo, useState } from 'react'
 import { SearchBar } from '../ui/SearchBar'
 import { useFetchData } from '../../hooks/useFetchData'
-import { obtenerProveedores } from '../../services/proveedores'
-import { obtenerArticulosPorProveedor } from '../../services/proveedorArticulos'
+import { obtenerProveedoresPorArticulo } from '../../services/proveedorArticulos'
 import ButtonLayout from '../ui/ButtonLayout'
 import { toast } from 'react-toastify'
-import { crearOc } from '../../services/ordenes'
+import { crearOc, obtenerOcActiva } from '../../services/ordenes'
 import { useUpdateKeyStore } from '../../hooks/useStore'
+import { obtenerArticulos } from '../../services/articulos'
 
 export const CrearOrdenCompra = ({ modalRef }) => {
-    const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null)
+    const [proveedorArticuloSeleccionado, setProveedorArticuloSeleccionado] = useState(null)
     const [articuloSeleccionado, setArticuloSeleccionado] = useState(null)
     const [cantidad, setCantidad] = useState(1)
-    const [articulos, setArticulos] = useState([])
-    const [proveedorArticulos, setProveedorArticulos] = useState([])
-    const { data: proveedores } = useFetchData(obtenerProveedores)
+    const [proveedoresArticulo, setProveedoresArticulo] = useState([])
+    const { data: articulos } = useFetchData(obtenerArticulos)
 
-    const proveedorArticuloSeleccionado = useMemo(() => {
-        return proveedorArticulos.find(pa => pa.articulo.id_articulo === articuloSeleccionado?.id_articulo && pa.proveedor.id_proveedor === proveedorSeleccionado?.id_proveedor)
-    }, [articuloSeleccionado, proveedorSeleccionado, proveedorArticulos])
+
 
     const { incrementUpdateKey } = useUpdateKeyStore()
 
-    const handleClickOpcion = (proveedor) => {
-        setProveedorSeleccionado(proveedor)
-
-    }
-
-    const handleChangeSelectProveedor = (id) => {
-        const proveedor = proveedores.find(p => p.id_proveedor === id);
-        setProveedorSeleccionado(proveedor);
-        setArticuloSeleccionado(null);
-        setCantidad(1);
-    }
 
     const handleChangeSelectArticulo = (id) => {
         const articulo = articulos.find(a => a.id_articulo === id);
+        setProveedorArticuloSeleccionado(null);
         setArticuloSeleccionado(articulo);
+        setCantidad(1);
+    }
+
+    const handleChangeSelectProveedor = (id) => {
+        const proveedorArticulo = proveedoresArticulo.find(pa => pa.proveedor.id_proveedor === id);
+        setProveedorArticuloSeleccionado(proveedorArticulo);
     }
 
     const handleGenerarOrden = async () => {
-        if (!proveedorSeleccionado || !articuloSeleccionado || cantidad <= 0) {
+        if (!proveedorArticuloSeleccionado || !articuloSeleccionado || cantidad <= 0) {
             toast.error('Por favor, complete todos los campos correctamente.');
             return;
         }
@@ -50,11 +43,10 @@ export const CrearOrdenCompra = ({ modalRef }) => {
         if (response.ok) {
             toast.success('Orden de compra generada correctamente');
             modalRef.current?.close();
-            setProveedorSeleccionado(null);
+            setProveedorArticuloSeleccionado(null);
             setArticuloSeleccionado(null);
             setCantidad(1);
-            setArticulos([]);
-            setProveedorArticulos([]);
+            setProveedoresArticulo([]);
             incrementUpdateKey();
         } else {
             toast.error('Error al generar la orden de compra');
@@ -62,88 +54,111 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     }
 
     useEffect(() => {
-        if (proveedorSeleccionado) {
-            obtenerArticulosPorProveedor(proveedorSeleccionado.id_proveedor).then(data => {
-                setProveedorArticulos(data);
-                console.log(data)
-                setArticulos(data.map(proveedorArticulo => proveedorArticulo.articulo));
+        if (articuloSeleccionado) {
+            obtenerProveedoresPorArticulo(articuloSeleccionado.id_articulo).then(data => {
+                setProveedoresArticulo(data);
             });
+
+            obtenerOcActiva(articuloSeleccionado.id_articulo).then(res => {
+                if (res.ok) {
+                    res.json().then(ordenes => {
+                        if (ordenes.length > 0) {
+                            toast.info('Ya existe una orden de compra activa para este artículo.');
+                        }
+                    })
+                }
+            })
+        } else {
+            setProveedoresArticulo([]);
+            setProveedorArticuloSeleccionado(null);
         }
-    }, [proveedorSeleccionado]);
+    }, [articuloSeleccionado]);
+
+    useEffect(() => {
+        if (proveedoresArticulo.length > 0) {
+            setProveedorArticuloSeleccionado(proveedoresArticulo.find(pA => pA.es_predeterminado));
+        }
+    }, [proveedoresArticulo]);
+
+    useEffect(() => {
+        if (proveedorArticuloSeleccionado && proveedorArticuloSeleccionado.modelo_seleccionado === 'lote_fijo') {
+            setCantidad(proveedorArticuloSeleccionado.modeloInventario.lote_optimo || 1);
+        }
+    }, [proveedorArticuloSeleccionado]);
 
     return (
         <div className='flex flex-col gap-4'>
             <h2 className="text-xl text-center font-bold">Generar Orden de Compra</h2>
             <div className='flex h-full flex-col gap-4 mt-4'>
-                <SearchBar data={proveedores} placeholder="Buscar proveedor..." atributo="nombre" onClickOpcion={handleClickOpcion} />
+                <SearchBar data={articulos} placeholder="Buscar articulo..." atributo={"descripcion"} onClickOpcion={setArticuloSeleccionado} />
 
-                <span className='font-semibold'>Seleccione un Proveedor</span>
+                <span className='font-semibold'>Seleccione un Articulo</span>
                 <select
-                    value={proveedorSeleccionado ? proveedorSeleccionado.id_proveedor : '0'}
+                    value={articuloSeleccionado ? articuloSeleccionado.id_articulo : '0'}
                     onChange={(e) =>
-                        handleChangeSelectProveedor(+e.target.value)
+                        handleChangeSelectArticulo(+e.target.value)
                     }
                     className='border border-gray-300 rounded-md p-2 text-white'
                 >
                     <option value='0' className='bg-gray-400 text-black'>
-                        Seleccionar Proveedor...
+                        Seleccionar Articulo...
                     </option>
-                    {proveedores.map(proveedor => (
-                        <option key={proveedor.id_proveedor} value={proveedor.id_proveedor} className='bg-gray-400 text-black'>
-                            {proveedor.nombre}
+                    {articulos.map(articulo => (
+                        <option key={articulo.id_articulo} value={articulo.id_articulo} className='bg-gray-400 text-black'>
+                            {articulo.descripcion}
                         </option>
                     ))}
                 </select>
 
-                {articulos.length > 0 ? (
+                {proveedoresArticulo.length > 0 ? (
                     <div className='mt-4 flex flex-col gap-4 border border-gray-300 rounded p-4'>
-                        <SearchBar data={articulos} placeholder="Buscar articulo..." atributo="descripcion" onClickOpcion={setArticuloSeleccionado} />
+                        <SearchBar data={proveedoresArticulo} placeholder="Buscar proveedor..." atributo={"proveedor.nombre"} onClickOpcion={setProveedorArticuloSeleccionado} />
 
-                        <span className='font-semibold'>Seleccione un Articulo</span>
+                        <span className='font-semibold'>Seleccione un Proveedor</span>
 
                         <select
-                            value={articuloSeleccionado ? articuloSeleccionado.id_articulo : '0'}
-                            onChange={(e) =>
-                                handleChangeSelectArticulo(+e.target.value)
-                            }
+                            value={proveedorArticuloSeleccionado ? proveedorArticuloSeleccionado.id_proveedor : '0'}
+                            onChange={(e) => handleChangeSelectProveedor(+e.target.value)}
                             className='border border-gray-300 rounded-md p-2 text-white'
                         >
                             <option value='0' className='bg-gray-400 text-black'>
-                                Seleccionar Articulo...
+                                Seleccionar Proveedor...
                             </option>
-                            {articulos.map(articulo => (
-                                <option key={articulo.id_articulo} value={articulo.id_articulo} className='bg-gray-400 text-black'>
-                                    {articulo.descripcion}
+                            {proveedoresArticulo.map(pA => (
+                                <option key={pA.proveedor.id_proveedor} value={pA.proveedor.id_proveedor} className='bg-gray-400 text-black'>
+                                    {pA.proveedor.nombre}
                                 </option>
                             ))}
                         </select>
+                        <p><span className='font-semibold'>Proveedor Predeterminado:</span> {proveedoresArticulo.find(pA => pA.es_predeterminado)?.proveedor.nombre}</p>
 
-                        {articuloSeleccionado && (
+
+                        {proveedorArticuloSeleccionado && (
                             <>
-                                <label>Cantidad</label>
-                                <input
-                                    type='number'
-                                    className={`border rounded-md p-2 'border-gray-300'}`}
-                                    value={cantidad}
-                                    onChange={(e) => setCantidad(+e.target.value)}
-                                    min={1}
-                                />
-                                <div>
-                                    <p className='text-white mt-2'>Costo Pedido: ${proveedorArticuloSeleccionado?.costo_pedido}</p>
+                                <div className='flex flex-col gap-2 mt-4'>
+                                    <label>Cantidad</label>
+                                    <input
+                                        type='number'
+                                        className={`border rounded-md p-2 'border-gray-300'}`}
+                                        value={cantidad}
+                                        onChange={(e) => setCantidad(+e.target.value)}
+                                        min={1}
+                                    />
+                                    {proveedorArticuloSeleccionado.modelo_seleccionado === "lote_fijo" && <p><span className='font-semibold'>Cantidad recomendada:</span> {proveedorArticuloSeleccionado.modeloInventario.lote_optimo}</p>}
 
-                                    <p className='text-white mt-2'>Precio Unitario: ${proveedorArticuloSeleccionado?.precio_unitario}</p>
-
-                                    <p className='text-white font-bold mt-2'>Total: ${proveedorArticuloSeleccionado?.precio_unitario * cantidad}</p>
                                 </div>
+                                <div>
+                                    <p className='text-white mt-2'>Precio Unitario: ${proveedorArticuloSeleccionado.precio_unitario}</p>
 
-
+                                    <p className='text-white font-bold mt-2'>Total: ${proveedorArticuloSeleccionado.precio_unitario * cantidad}</p>
+                                </div>
                             </>
                         )}
                     </div>
 
                 ) : (
-                    proveedorSeleccionado && (
-                        <p className='text-gray-500'>No hay artículos disponibles para este proveedor.</p>
+                    articuloSeleccionado && (
+                        <p className='text-gray-500'>No hay proveedores disponibles para este artículo.</p>
                     )
                 )}
             </div>
