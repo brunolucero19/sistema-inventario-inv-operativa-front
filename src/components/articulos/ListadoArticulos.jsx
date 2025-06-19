@@ -237,16 +237,6 @@ const ListadoArticulos = () => {
               min={0}
             />
 
-            <label htmlFor='inventario_maximo'>Inventario máximo</label>
-            <input
-              type='number'
-              id='inventario_maximo'
-              name='inventario_maximo'
-              className='border border-gray-300 rounded-lg p-2'
-              required
-              min={0}
-            />
-
             <div className='flex justify-around mt-4'>
               <ButtonLayout
                 onClick={handleCancel}
@@ -294,8 +284,7 @@ const ListadoArticulos = () => {
             'precioVenta',
             'demanda_articulo',
             'costo_almacenamiento',
-            'desviacion_est_dem',
-            'inventario_maximo',
+            'desviacion_est_dem'
           ]}
           actions={actions}
         />

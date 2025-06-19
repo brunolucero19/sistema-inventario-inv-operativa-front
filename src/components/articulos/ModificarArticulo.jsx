@@ -80,17 +80,6 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           required
         />
 
-        <label htmlFor='inventario_maximo'>Inventario máximo</label>
-        <input
-          type='number'
-          id='inventario_maximo'
-          name='inventario_maximo'
-          value={articulo.inventario_maximo}
-          onChange={e => setArticulo({ ...articulo, inventario_maximo: +e.target.value })}
-          className='border border-gray-300 rounded-lg p-2'
-          required
-        />
-
         <div className='flex justify-around mt-4'>
           <ButtonLayout
             onClick={handleCancel}
