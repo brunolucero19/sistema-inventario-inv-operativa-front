@@ -5,7 +5,7 @@ import Modal from '../ui/Modal'
 import TrashIcon from '../../../public/icons/TrashIcon'
 import { obtenerArticulos } from '../../services/articulos'
 import ListadoVentas from './ListadoVentas'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Search } from 'lucide-react'
 import { useUpdateKeyStore } from '../../hooks/useStore'
 
@@ -21,6 +21,13 @@ const GenerarVenta = () => {
   useEffect(() => {
     obtenerArticulos().then(setArticulosDisponibles)
   }, [])
+
+  const total = useMemo(() => {
+    return detalleArticulos.reduce((acc, item) => {
+      const articulo = articulosDisponibles.find(a => a.id_articulo === item.articuloId)
+      return acc + (articulo?.precioVenta * item.cantidad || 0)
+    }, 0)
+  }, [detalleArticulos, articulosDisponibles])
 
   const handleAddArticulo = (articuloSeleccionado = null) => {
     setDetalleArticulos((prev) => {
@@ -267,7 +274,11 @@ const GenerarVenta = () => {
                 )
               })}
             </div>
-
+              <div>
+                <p className='text-left font-semibold mt-2'>
+                  Total: ${total}
+                </p>
+              </div>
             <div className='flex justify-around mt-4'>
               <ButtonLayout
                 onClick={handleCancel}

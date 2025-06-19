@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 
 const Theme = () => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
-  
   useEffect(() => {
     if (isDark) {
       document.body.classList.add("dark-theme");
+      document.body.classList.remove("light-theme");
     } else {
+      document.body.classList.add("light-theme");
       document.body.classList.remove("dark-theme");
     }
   }, [isDark]);

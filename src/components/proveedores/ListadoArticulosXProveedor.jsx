@@ -99,8 +99,8 @@ const ListadoArticulosXProveedor = () => {
         modeloSeleccionadoRaw === 'Lote Fijo' ? 'lote_fijo' : 'intervalo_fijo',
       precio_unitario: parseFloat(formData.get('precio_unitario')),
       demora_entrega: parseInt(formData.get('demora_entrega')),
+      nivel_servicio: parseInt(formData.get('nivel_servicio')),
       costo_pedido: parseFloat(formData.get('costo_pedido')),
-      costo_compra: parseFloat(formData.get('costo_compra')),
       id_proveedor: proveedorSeleccionado,
     }
 
@@ -117,7 +117,8 @@ const ListadoArticulosXProveedor = () => {
       incrementUpdateKey()
       cerrarModalEditarArticulo()
     } else {
-      toast.error('Error al actualizar el artículo')
+      const data = await response.json()
+      toast.error(data.error || 'Error al actualizar el artículo')
     }
   }
 
@@ -142,7 +143,8 @@ const ListadoArticulosXProveedor = () => {
       incrementUpdateKey()
       cerrarModalEliminarArticulo()
     } else {
-      toast.error('Error al eliminar la relación')
+      const data = await response.json()
+      toast.error(data.error || 'Error al eliminar la relación')
     }
   }
 
@@ -202,7 +204,6 @@ const ListadoArticulosXProveedor = () => {
       demora_entrega: parseInt(formData.get('demora_entrega')),
       nivel_servicio: parseInt(formData.get('nivel_servicio')),
       costo_pedido: parseFloat(formData.get('costo_pedido')),
-      costo_compra: parseFloat(formData.get('costo_compra')),
     }
 
     if (modeloInventario === 'Intervalo Fijo') {
@@ -218,7 +219,8 @@ const ListadoArticulosXProveedor = () => {
       incrementUpdateKey()
       cerrarModalAgregarArticulo()
     } else {
-      toast.error('Error al agregar la relación')
+      const data = await response.json()
+      toast.error(data.error || 'Error al agregar la relación')
     }
   }
 
@@ -395,16 +397,7 @@ const ListadoArticulosXProveedor = () => {
                 required
                 min={0}
               />
-              <label htmlFor='costo_compra'>Costo de compra</label>
-              <input
-                type='number'
-                id='costo_compra'
-                name='costo_compra'
-                defaultValue={articuloSeleccionado.costo_compra}
-                className='border border-gray-300 rounded-lg p-2'
-                required
-                min={0}
-              />
+              
               <div className='flex justify-around mt-4'>
                 <ButtonLayout
                   onClick={cerrarModalEditarArticulo}
@@ -574,15 +567,7 @@ const ListadoArticulosXProveedor = () => {
               required
               min={0}
             />
-            <label htmlFor='costo_compra'>Costo de compra</label>
-            <input
-              type='number'
-              id='costo_compra'
-              name='costo_compra'
-              className='border border-gray-300 rounded-lg p-2'
-              required
-              min={0}
-            />
+            
             <div className='flex justify-around mt-4'>
               <ButtonLayout
                 onClick={cerrarModalAgregarArticulo}
