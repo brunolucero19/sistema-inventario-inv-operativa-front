@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useRef, useMemo } from "react"
 import { modificarOc, obtenerOrdenesCompra } from "../../services/ordenes"
 import Modal from "../ui/Modal"
 import { SearchBar } from "../ui/SearchBar"
