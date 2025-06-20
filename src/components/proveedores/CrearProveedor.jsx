@@ -37,6 +37,7 @@ const CrearProveedor = ({ modalRef }) => {
         modelo_seleccionado: '',
         es_predeterminado: false,
         periodo_revision: null,
+        nivel_servicio: '',
       },
     ])
   }
@@ -73,7 +74,8 @@ const CrearProveedor = ({ modalRef }) => {
         !a.id_articulo ||
         !a.precio_unitario ||
         !a.demora_entrega ||
-        !a.modelo_seleccionado
+        !a.modelo_seleccionado ||
+        !a.nivel_servicio
     )
 
     if (hasDuplicates) {
@@ -93,6 +95,7 @@ const CrearProveedor = ({ modalRef }) => {
       art.costo_pedido = parseFloat(art.costo_pedido) || 0
       art.id_articulo = parseInt(art.id_articulo) || 0
       art.periodo_revision = parseInt(art.periodo_revision) || null
+      art.nivel_servicio = parseInt(art.nivel_servicio) || 0
     })
 
     data.articulos = articulosSeleccionados
@@ -194,50 +197,6 @@ const CrearProveedor = ({ modalRef }) => {
                   ))}
                 </select>
               </div>
-              <div className='flex gap-2 items-center'>
-                <label className='w-28'>Precio unit.</label>
-                <input
-                  type='number'
-                  className='flex-1 border rounded p-1'
-                  value={art.precio_unitario}
-                  onChange={(e) =>
-                    handleArticuloChange(
-                      index,
-                      'precio_unitario',
-                      e.target.value
-                    )
-                  }
-                  min={0}
-                />
-              </div>
-              <div className='flex gap-2 items-center'>
-                <label className='w-28'>Tiempo entrega</label>
-                <input
-                  type='number'
-                  className='flex-1 border rounded p-1'
-                  value={art.demora_entrega}
-                  onChange={(e) =>
-                    handleArticuloChange(
-                      index,
-                      'demora_entrega',
-                      e.target.value
-                    )
-                  }
-                  min={0}
-                />
-              </div>
-              <div className='flex gap-2 items-center'>
-                <label className='w-28'>Costo pedido</label>
-                <input
-                  type='number'
-                  className='flex-1 border rounded p-1'
-                  value={art.costo_pedido}
-                  onChange={(e) =>
-                    handleArticuloChange(index, 'costo_pedido', e.target.value)
-                  }
-                  min={0}
-                />
-              </div>
               <div className='flex gap-4 items-center'>
                 <label className=''>¿Es el proveedor predeterminado?</label>
                 <input
@@ -253,8 +212,74 @@ const CrearProveedor = ({ modalRef }) => {
                   }
                 />
               </div>
-              <div className='flex gap-2 items-center'>
-                <label className='w-28'>Modelo de inventario</label>
+              <div className='flex flex-col gap-2'>
+                <label>Precio unitario</label>
+                <input
+                  type='number'
+                  className='flex-1 border rounded p-1'
+                  value={art.precio_unitario}
+                  onChange={(e) =>
+                    handleArticuloChange(
+                      index,
+                      'precio_unitario',
+                      e.target.value
+                    )
+                  }
+                  min={0}
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label>Demora de entrega</label>
+                <input
+                  type='number'
+                  className='flex-1 border rounded p-1'
+                  value={art.demora_entrega}
+                  onChange={(e) =>
+                    handleArticuloChange(
+                      index,
+                      'demora_entrega',
+                      e.target.value
+                    )
+                  }
+                  min={0}
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label>Costo de pedido</label>
+                <input
+                  type='number'
+                  className='flex-1 border rounded p-1'
+                  value={art.costo_pedido}
+                  onChange={(e) =>
+                    handleArticuloChange(index, 'costo_pedido', e.target.value)
+                  }
+                  min={0}
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label htmlFor='nivel_servicio'>Nivel de Servicio</label>
+                <select
+                  id='nivel_servicio'
+                  name='nivel_servicio'
+                  className='border border-gray-300 bg-gray-800 rounded p-1 flex-1'
+                  required
+                  value={art.nivel_servicio}
+                  onChange={(e) =>
+                    handleArticuloChange(
+                      index,
+                      'nivel_servicio',
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value=''>Seleccione una opción</option>
+                  <option value='85'>85%</option>
+                  <option value='90'>90%</option>
+                  <option value='95'>95%</option>
+                </select>
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label>Modelo de inventario</label>
                 <select
                   className='flex-1 border rounded p-1 bg-gray-800 text-white'
                   value={art.modelo_seleccionado}
@@ -272,8 +297,8 @@ const CrearProveedor = ({ modalRef }) => {
                 </select>
               </div>
               {art.modelo_seleccionado === 'intervalo_fijo' && (
-                <div className='flex gap-2 items-center'>
-                  <label className='w-28'>Período de revisión</label>
+                <div className='flex flex-col gap-2'>
+                  <label>Período de revisión (en días)</label>
                   <input
                     type='number'
                     className='flex-1 border rounded p-1'
