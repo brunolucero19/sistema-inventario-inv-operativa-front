@@ -193,7 +193,7 @@ const ListadoArticulos = () => {
             />
 
             <label htmlFor='costo_almacenamiento'>
-              Costo de almacenamiento
+              Costo de almacenamiento (unidad/año)
             </label>
             <input
               type='number'

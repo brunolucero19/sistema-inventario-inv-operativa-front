@@ -51,7 +51,7 @@ const ListadoArticulosXProveedor = () => {
             item.modelo_seleccionado === 'lote_fijo'
               ? 'Lote Fijo'
               : 'Intervalo Fijo',
-          periodo_revision: item.modeloInventario.periodo_revision || null,
+          periodo_revision: item.modeloInventario?.periodo_revision || null,
         }))
       )
     }
@@ -377,7 +377,7 @@ const ListadoArticulosXProveedor = () => {
                 required
                 min={0}
               />
-              <label htmlFor='demora_entrega'>Demora de entrega</label>
+              <label htmlFor='demora_entrega'>Demora de entrega (en días)</label>
               <input
                 type='number'
                 id='demora_entrega'
@@ -549,7 +549,7 @@ const ListadoArticulosXProveedor = () => {
               required
               min={0}
             />
-            <label htmlFor='demora_entrega'>Demora de entrega</label>
+            <label htmlFor='demora_entrega'>Demora de entrega (en días)</label>
             <input
               type='number'
               id='demora_entrega'

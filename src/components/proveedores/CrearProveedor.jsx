@@ -229,7 +229,7 @@ const CrearProveedor = ({ modalRef }) => {
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <label>Demora de entrega</label>
+                <label>Demora de entrega (en días)</label>
                 <input
                   type='number'
                   className='flex-1 border rounded p-1'
