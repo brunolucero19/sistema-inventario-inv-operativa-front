@@ -30,6 +30,8 @@ const ListadoProveedoresXArticulo = () => {
         const data = await obtenerProveedoresPorArticulo(selectedId);
         const proveedoresFormateados = data.map((item) => ({
           id_proveedor: item.proveedor.id_proveedor,
+          precio_unitario: item.precio_unitario,
+          costo_pedido: item.costo_pedido,
           nombre: item.proveedor.nombre,
           apellido: item.proveedor.apellido,
           email: item.proveedor.email,
@@ -65,7 +67,7 @@ const ListadoProveedoresXArticulo = () => {
       </div>
 
       <Tabla
-        columns={['id_proveedor', 'nombre', 'apellido', 'email', 'telefono']}
+        columns={['id_proveedor', "precio_unitario", "costo_pedido", 'nombre', 'apellido', 'email', 'telefono']}
         data={proveedoresArt}
         filaPorPagina={5}
       />

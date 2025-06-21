@@ -253,7 +253,7 @@ const CrearProveedor = ({ modalRef }) => {
                   onChange={(e) =>
                     handleArticuloChange(index, 'costo_pedido', e.target.value)
                   }
-                  min={0}
+                  min={1}
                 />
               </div>
               <div className='flex flex-col gap-2'>

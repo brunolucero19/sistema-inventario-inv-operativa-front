@@ -363,7 +363,7 @@ const ListadoArticulosXProveedor = () => {
                     defaultValue={articuloSeleccionado.periodo_revision}
                     className='border border-gray-300 rounded-lg p-2'
                     required
-                    min={0}
+                    min={1}
                   />
                 </>
               )}
@@ -395,7 +395,7 @@ const ListadoArticulosXProveedor = () => {
                 defaultValue={articuloSeleccionado.costo_pedido}
                 className='border border-gray-300 rounded-lg p-2'
                 required
-                min={0}
+                min={1}
               />
               
               <div className='flex justify-around mt-4'>
@@ -536,7 +536,7 @@ const ListadoArticulosXProveedor = () => {
                   name='periodo_revision'
                   className='border border-gray-300 rounded-lg p-2'
                   required
-                  min={0}
+                  min={1}
                 />
               </>
             )}
@@ -565,7 +565,7 @@ const ListadoArticulosXProveedor = () => {
               name='costo_pedido'
               className='border border-gray-300 rounded-lg p-2'
               required
-              min={0}
+              min={1}
             />
             
             <div className='flex justify-around mt-4'>

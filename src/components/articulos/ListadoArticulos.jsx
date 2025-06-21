@@ -189,7 +189,7 @@ const ListadoArticulos = () => {
               name='demanda_articulo'
               className='border border-gray-300 rounded-lg p-2'
               required
-              min={0}
+              min={1}
             />
 
             <label htmlFor='costo_almacenamiento'>
@@ -202,10 +202,10 @@ const ListadoArticulos = () => {
               name='costo_almacenamiento'
               className='border border-gray-300 rounded-lg p-2'
               required
-              min={0}
+              min={1}
             />
 
-            <label htmlFor='stock'>Stock inicial</label>
+            <label htmlFor='stock'>Stock</label>
             <input
               type='number'
               id='stock'

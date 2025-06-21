@@ -89,8 +89,7 @@ const AjusteInventario = () => {
           columns={[
             'id_articulo',
             'descripcion',
-            'stock',
-            'inventario_maximo'
+            'stock'
           ]}
           actions={actions}
         />
