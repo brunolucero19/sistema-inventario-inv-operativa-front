@@ -65,3 +65,17 @@ export const eliminarArticulo = async (idArticulo) => {
 
   return response
 }
+
+export const obtenerArticulosAreponer = async () => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/obtener-proveedores-articulos-a-reponer`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  const data = await response.json()
+
+  return data
+}
