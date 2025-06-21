@@ -79,3 +79,17 @@ export const obtenerArticulosAreponer = async () => {
 
   return data
 }
+
+export const obtenerArticulosFaltantes = async () => {
+  const URL = import.meta.env.VITE_BACKEND_URL
+  const url = `${URL}api/articulos/obtener-proveedores-articulos-faltantes`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  const data = await response.json()
+
+  return data
+}
