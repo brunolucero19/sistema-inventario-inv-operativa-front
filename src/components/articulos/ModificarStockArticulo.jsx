@@ -19,13 +19,11 @@ export const ModificarStockArticulo = ({ articulo, setArticulo, handleUpdate, ha
                     id='stock'
                     name='stock'
                     min={0}
-                    max={articulo.inventario_maximo}
                     value={articulo.stock}
                     onChange={e => setArticulo({ ...articulo, stock: +e.target.value })}
                     className='border border-gray-300 rounded-lg p-2'
                     required
                 />
-                <p className="font-semibold">Inventario maximo: {articulo.inventario_maximo}</p>
 
                 <div className='flex justify-around mt-4'>
                     <ButtonLayout
