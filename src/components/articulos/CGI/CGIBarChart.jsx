@@ -7,11 +7,11 @@ const CGIBarChart = ({ data }) => {
     return <p>No hay datos para mostrar</p>
   }
 
-  const labels = data.map((item) => item.proveedor.nombre)
+  const labels = data.map((item) => item.proveedor)
   const values = data.map((item) => item.cgi)
 //color: '#1976d2',
   return (
-    <div style={{ width: '100%', maxWidth: 600 }}>
+    <div className='w-1/2 h-full'>
       <BarChart
         xAxis={[
             {
@@ -58,4 +58,4 @@ const CGIBarChart = ({ data }) => {
   )
 }
 
-export default CGIBarChart
+export default CGIBarChart;
