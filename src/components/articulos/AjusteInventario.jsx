@@ -1,13 +1,13 @@
-import { Edit, Search } from "lucide-react"
-import { useFetchData } from "../../hooks/useFetchData"
-import { useSearchFilter } from "../../hooks/useSearchFilter"
-import { modificarArticulo, obtenerArticulos } from "../../services/articulos"
-import Tabla from "../ui/Tabla"
-import { useUpdateKeyStore } from "../../hooks/useStore"
-import { useRef, useState } from "react"
-import Modal from "../ui/Modal"
-import { ModificarStockArticulo } from "./ModificarStockArticulo"
-import { toast } from "react-toastify"
+import { Edit, Search } from 'lucide-react'
+import { useFetchData } from '../../hooks/useFetchData'
+import { useSearchFilter } from '../../hooks/useSearchFilter'
+import { modificarArticulo, obtenerArticulos } from '../../services/articulos'
+import Tabla from '../ui/Tabla'
+import { useUpdateKeyStore } from '../../hooks/useStore'
+import { useRef, useState } from 'react'
+import Modal from '../ui/Modal'
+import { ModificarStockArticulo } from './ModificarStockArticulo'
+import { toast } from 'react-toastify'
 
 const AjusteInventario = () => {
   const modalRef = useRef()
@@ -36,7 +36,7 @@ const AjusteInventario = () => {
       onClick: (row) => {
         onClickEdit(row)
       },
-    }
+    },
   ]
 
   const handleUpdateArticulo = async () => {
@@ -51,11 +51,11 @@ const AjusteInventario = () => {
         modalRef.current?.close()
         incrementUpdateKey()
       } else {
-        toast.error('Error al modificar el articuo')
+        toast.error('Error al modificar el artículo')
       }
     } catch (error) {
       console.log(error)
-      toast.error('Error al modificar el articuo')
+      toast.error('Error al modificar el artículo')
     }
   }
 
@@ -67,7 +67,7 @@ const AjusteInventario = () => {
   if (loading) return <p>Cargando...</p>
   if (error) return <p>Error: {error.message}</p>
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <div className='relative w-64'>
         <input
           type='text'
@@ -81,20 +81,20 @@ const AjusteInventario = () => {
         </div>
       </div>
       <Modal modalRef={modalRef}>
-        <ModificarStockArticulo articulo={articuloToEdit} setArticulo={setArticuloToEdit} handleUpdate={handleUpdateArticulo} handleCancel={handleCancel}/>
+        <ModificarStockArticulo
+          articulo={articuloToEdit}
+          setArticulo={setArticuloToEdit}
+          handleUpdate={handleUpdateArticulo}
+          handleCancel={handleCancel}
+        />
       </Modal>
-      <div className="mt-6">
+      <div className='mt-6'>
         <Tabla
           data={filteredItems}
-          columns={[
-            'id_articulo',
-            'descripcion',
-            'stock'
-          ]}
+          columns={['id_articulo', 'descripcion', 'stock']}
           actions={actions}
         />
       </div>
-
     </div>
   )
 }

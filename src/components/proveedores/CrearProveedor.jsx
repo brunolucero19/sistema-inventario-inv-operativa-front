@@ -159,6 +159,7 @@ const CrearProveedor = ({ modalRef }) => {
           id='telefono'
           name='telefono'
           className='border border-gray-300 rounded-lg p-2'
+          placeholder='+54 9 11 2345-6789'
         />
         {/* Sección de artículos */}
         <div className='mt-4'>

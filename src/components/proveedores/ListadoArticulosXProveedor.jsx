@@ -35,7 +35,6 @@ const ListadoArticulosXProveedor = () => {
       setMappedArticulos([])
       return
     }
-    console.log('articulosPorProveedor', articulosPorProveedor)
     if (articulosPorProveedor && articulosPorProveedor.length > 0) {
       setMappedArticulos(
         articulosPorProveedor.map((item) => ({

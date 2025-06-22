@@ -1,10 +1,13 @@
 import { Edit } from 'lucide-react'
+import { getCardColor } from '../../utils/cardsColor'
 
 export const OrdenCard = ({ orden, onClick }) => {
   return (
     <div
       key={orden.id_orden_compra}
-      className='bg-white rounded-xl shadow-md border border-gray-200 p-6 transition-transform hover:scale-105 hover:shadow-lg'
+      className={`rounded-xl shadow-md border border-gray-200 p-6 transition-transform hover:scale-105 hover:shadow-lg ${getCardColor(
+        orden.estadoOrdenCompra.id_estado_orden_compra
+      )}`}
     >
       <div className='flex justify-between items-center'>
         <h3 className='text-xl font-bold text-gray-800 mb-2'>

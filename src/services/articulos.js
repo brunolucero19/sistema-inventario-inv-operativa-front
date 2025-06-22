@@ -6,11 +6,10 @@ export const crearArticulo = async (articulo) => {
   const data = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(articulo)
+    body: JSON.stringify(articulo),
   })
 
   return data
-
 }
 
 export const obtenerArticulo = async (id) => {
@@ -48,7 +47,7 @@ export const modificarArticulo = async (idArticulo, articuloModificado) => {
   const response = await fetch(url, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(articuloModificado)
+    body: JSON.stringify(articuloModificado),
   })
 
   return response

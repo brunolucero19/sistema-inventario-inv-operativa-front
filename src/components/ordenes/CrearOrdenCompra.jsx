@@ -165,13 +165,6 @@ export const CrearOrdenCompra = ({ modalRef }) => {
 
         {proveedoresArticulo.length > 0 ? (
           <div className='mt-4 flex flex-col gap-4 border border-gray-300 rounded p-4'>
-            <SearchBar
-              data={proveedoresArticulo}
-              placeholder='Buscar proveedor...'
-              atributo={'proveedor.nombre'}
-              onClickOpcion={setProveedorArticuloSeleccionado}
-            />
-
             <span className='font-semibold'>Seleccione un Proveedor</span>
 
             <select
@@ -192,16 +185,17 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                   value={pA.proveedor.id_proveedor}
                   className='bg-gray-400 text-black'
                 >
-                  {pA.proveedor.nombre}
+                  {pA.proveedor.nombre} {pA.proveedor.apellido}
                 </option>
               ))}
             </select>
             <p>
               <span className='font-semibold'>Proveedor Predeterminado:</span>{' '}
-              {
+              {proveedoresArticulo.find((pA) => pA.es_predeterminado)?.proveedor
+                .nombre +
+                ' ' +
                 proveedoresArticulo.find((pA) => pA.es_predeterminado)
-                  ?.proveedor.nombre
-              }
+                  ?.proveedor.apellido}
             </p>
 
             {proveedorArticuloSeleccionado && (

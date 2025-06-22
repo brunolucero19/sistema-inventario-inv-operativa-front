@@ -1,6 +1,11 @@
-import ButtonLayout from "../ui/ButtonLayout"
+import ButtonLayout from '../ui/ButtonLayout'
 
-export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleCancel }) => {
+export const ModificarArticulo = ({
+  articulo,
+  setArticulo,
+  handleUpdate,
+  handleCancel,
+}) => {
   if (!articulo) return null
 
   const handleSubmit = (e) => {
@@ -11,14 +16,19 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
   return (
     <>
       <h1 className='text-center font-bold uppercase'>Modificar artículo</h1>
-      <form className='flex flex-col gap-2 my-4' id='form-crear-articulo' onSubmit={handleSubmit}>
-
+      <form
+        className='flex flex-col gap-2 my-4'
+        id='form-crear-articulo'
+        onSubmit={handleSubmit}
+      >
         <label htmlFor='descripcion'>Descripción</label>
         <textarea
           id='descripcion'
           name='descripcion'
           value={articulo.descripcion}
-          onChange={e => setArticulo({ ...articulo, descripcion: e.target.value })}
+          onChange={(e) =>
+            setArticulo({ ...articulo, descripcion: e.target.value })
+          }
           className='border border-gray-300 rounded-lg p-2'
           required
         />
@@ -29,7 +39,9 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           id='demanda_articulo'
           name='demanda_articulo'
           value={articulo.demanda_articulo}
-          onChange={e => setArticulo({ ...articulo, demanda_articulo: +e.target.value })}
+          onChange={(e) =>
+            setArticulo({ ...articulo, demanda_articulo: +e.target.value })
+          }
           className='border border-gray-300 rounded-lg p-2'
           required
         />
@@ -41,18 +53,20 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           id='costo_almacenamiento'
           name='costo_almacenamiento'
           value={articulo.costo_almacenamiento}
-          onChange={e => setArticulo({ ...articulo, costo_almacenamiento: +e.target.value })}
+          onChange={(e) =>
+            setArticulo({ ...articulo, costo_almacenamiento: +e.target.value })
+          }
           className='border border-gray-300 rounded-lg p-2'
           required
         />
 
-        <label htmlFor='stock'>Stock inicial</label>
+        <label htmlFor='stock'>Stock</label>
         <input
           type='number'
           id='stock'
           name='stock'
           value={articulo.stock}
-          onChange={e => setArticulo({ ...articulo, stock: +e.target.value })}
+          onChange={(e) => setArticulo({ ...articulo, stock: +e.target.value })}
           className='border border-gray-300 rounded-lg p-2'
           required
         />
@@ -64,18 +78,24 @@ export const ModificarArticulo = ({ articulo, setArticulo, handleUpdate, handleC
           id='precioVenta'
           name='precioVenta'
           value={articulo.precioVenta}
-          onChange={e => setArticulo({ ...articulo, precioVenta: +e.target.value })}
+          onChange={(e) =>
+            setArticulo({ ...articulo, precioVenta: +e.target.value })
+          }
           className='border border-gray-300 rounded-lg p-2'
           required
         />
 
-        <label htmlFor='desviacion_est_dem'>Desviación Estandar de la Demanda</label>
+        <label htmlFor='desviacion_est_dem'>
+          Desviación Estandar de la Demanda
+        </label>
         <input
           type='number'
           id='desviacion_est_dem'
           name='desviacion_est_dem'
           value={articulo.desviacion_est_dem}
-          onChange={e => setArticulo({ ...articulo, desviacion_est_dem: +e.target.value })}
+          onChange={(e) =>
+            setArticulo({ ...articulo, desviacion_est_dem: +e.target.value })
+          }
           className='border border-gray-300 rounded-lg p-2'
           required
         />

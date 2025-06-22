@@ -73,11 +73,11 @@ const ListadoArticulos = () => {
         editModalRef.current?.close()
         incrementUpdateKey()
       } else {
-        toast.error('Error al modificar el articuo')
+        toast.error('Error al modificar el artículo')
       }
     } catch (error) {
       console.log(error)
-      toast.error('Error al modificar el articuo')
+      toast.error('Error al modificar el artículo')
     }
   }
 
@@ -111,7 +111,7 @@ const ListadoArticulos = () => {
       toast.success('Artículo creado correctamente')
       incrementUpdateKey()
     } else {
-      const error = await response.json()
+      const { error } = await response.json()
       toast.error(`Error: ${error[0].message || 'Error al crear el artículo'}`)
     }
   }
@@ -230,7 +230,7 @@ const ListadoArticulos = () => {
               Desviación Estandar de la Demanda
             </label>
             <input
-              type='float'
+              type='number'
               step='any'
               id='desviacion_est_dem'
               name='desviacion_est_dem'

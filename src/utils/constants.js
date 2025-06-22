@@ -3,3 +3,10 @@ export const nivelServicioZ = {
   90: 1.28,
   95: 1.64,
 }
+
+export const estadosOC = {
+  pendiente: 1,
+  cancelada: 2,
+  enviada: 3,
+  finalizada: 4,
+}
