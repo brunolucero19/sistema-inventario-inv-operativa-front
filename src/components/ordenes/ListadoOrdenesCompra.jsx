@@ -37,7 +37,10 @@ const ListadoOrdenesCompra = () => {
   const handleModificarOrden = async (orden) => {
     if (!orden) return null
 
-    const response = await modificarOc(orden)
+    const response = await modificarOc({
+      ...orden,
+      cantidad: +orden.cantidad,
+    })
 
     if (response.ok) {
       toast.success('Orden de compra modificada correctamente')

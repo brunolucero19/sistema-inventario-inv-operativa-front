@@ -39,8 +39,9 @@ export const ModificarArticulo = ({
           id='demanda_articulo'
           name='demanda_articulo'
           value={articulo.demanda_articulo}
+          min={1}
           onChange={(e) =>
-            setArticulo({ ...articulo, demanda_articulo: +e.target.value })
+            setArticulo({ ...articulo, demanda_articulo: e.target.value })
           }
           className='border border-gray-300 rounded-lg p-2'
           required
@@ -53,8 +54,9 @@ export const ModificarArticulo = ({
           id='costo_almacenamiento'
           name='costo_almacenamiento'
           value={articulo.costo_almacenamiento}
+          min={1}
           onChange={(e) =>
-            setArticulo({ ...articulo, costo_almacenamiento: +e.target.value })
+            setArticulo({ ...articulo, costo_almacenamiento: e.target.value })
           }
           className='border border-gray-300 rounded-lg p-2'
           required
@@ -66,7 +68,8 @@ export const ModificarArticulo = ({
           id='stock'
           name='stock'
           value={articulo.stock}
-          onChange={(e) => setArticulo({ ...articulo, stock: +e.target.value })}
+          min={0}
+          onChange={(e) => setArticulo({ ...articulo, stock: e.target.value })}
           className='border border-gray-300 rounded-lg p-2'
           required
         />
@@ -78,8 +81,9 @@ export const ModificarArticulo = ({
           id='precioVenta'
           name='precioVenta'
           value={articulo.precioVenta}
+          min={0}
           onChange={(e) =>
-            setArticulo({ ...articulo, precioVenta: +e.target.value })
+            setArticulo({ ...articulo, precioVenta: e.target.value })
           }
           className='border border-gray-300 rounded-lg p-2'
           required
@@ -93,8 +97,10 @@ export const ModificarArticulo = ({
           id='desviacion_est_dem'
           name='desviacion_est_dem'
           value={articulo.desviacion_est_dem}
+          min={0}
+          step='any'
           onChange={(e) =>
-            setArticulo({ ...articulo, desviacion_est_dem: +e.target.value })
+            setArticulo({ ...articulo, desviacion_est_dem: e.target.value })
           }
           className='border border-gray-300 rounded-lg p-2'
           required

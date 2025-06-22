@@ -43,7 +43,10 @@ const AjusteInventario = () => {
     try {
       const response = await modificarArticulo(
         articuloToEdit.id_articulo,
-        articuloToEdit
+        {
+          ...articuloToEdit,
+          stock: +articuloToEdit.stock,
+        }
       )
 
       if (response.ok) {

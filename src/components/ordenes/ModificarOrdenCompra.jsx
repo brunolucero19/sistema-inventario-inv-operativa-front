@@ -100,11 +100,12 @@ export const ModificarOrdenCompra = ({ orden, onSubmit, onCancel }) => {
           <input
             type='number'
             id='cantidad'
+            required
             disabled={orden?.id_estado_orden_compra !== 1}
             className='border border-gray-300 rounded-lg p-2 w-30 disabled:opacity-50'
-            value={+localOrden.cantidad}
+            value={localOrden.cantidad}
             onChange={(e) =>
-              setLocalOrden({ ...localOrden, cantidad: +e.target.value })
+              setLocalOrden({ ...localOrden, cantidad: e.target.value })
             }
             min={1}
           />

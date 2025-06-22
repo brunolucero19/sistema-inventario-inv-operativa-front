@@ -20,7 +20,7 @@ export const ModificarStockArticulo = ({ articulo, setArticulo, handleUpdate, ha
                     name='stock'
                     min={0}
                     value={articulo.stock}
-                    onChange={e => setArticulo({ ...articulo, stock: +e.target.value })}
+                    onChange={e => setArticulo({ ...articulo, stock: e.target.value })}
                     className='border border-gray-300 rounded-lg p-2'
                     required
                 />

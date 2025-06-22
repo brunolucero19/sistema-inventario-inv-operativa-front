@@ -13,7 +13,8 @@ export const CrearOrdenCompra = ({ modalRef }) => {
   const [proveedorArticuloSeleccionado, setProveedorArticuloSeleccionado] =
     useState(null)
   const [articuloSeleccionado, setArticuloSeleccionado] = useState(null)
-  const [cantidad, setCantidad] = useState(1)
+  const [cantidad, setCantidad] = useState("1")
+  const [cantidadRecomendada, setCantidadRecomendada] = useState(0)
   const [proveedoresArticulo, setProveedoresArticulo] = useState([])
   const { data: articulos } = useFetchData(obtenerArticulos)
 
@@ -25,7 +26,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     const articulo = articulos.find((a) => a.id_articulo === id)
     setProveedorArticuloSeleccionado(null)
     setArticuloSeleccionado(articulo)
-    setCantidad(1)
+    setCantidad("1")
   }
 
   const handleChangeSelectProveedor = (id) => {
@@ -35,7 +36,9 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     setProveedorArticuloSeleccionado(proveedorArticulo)
   }
 
-  const handleGenerarOrden = async () => {
+  const handleGenerarOrden = async (e) => {
+    e.preventDefault()
+
     if (
       !proveedorArticuloSeleccionado ||
       !articuloSeleccionado ||
@@ -48,7 +51,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
     const response = await crearOc({
       id_proveedor_articulo:
         proveedorArticuloSeleccionado.id_proveedor_articulo,
-      cantidad,
+      cantidad: +cantidad,
     })
     const data = await response.json()
 
@@ -129,11 +132,12 @@ export const CrearOrdenCompra = ({ modalRef }) => {
       const q = d * (T + L) + z * desv_rev_entrega - I
 
       setCantidad(Math.round(Math.max(q, 0)))
+      setCantidadRecomendada(Math.round(Math.max(q, 0)))
     }
   }, [proveedorArticuloSeleccionado, articuloSeleccionado, ordenesActivas])
 
   return (
-    <div className='flex flex-col gap-4'>
+    <form onSubmit={handleGenerarOrden} className='flex flex-col gap-4'>
       <h2 className='text-xl text-center font-bold'>Generar Orden de Compra</h2>
       <div className='flex h-full flex-col gap-4 mt-4'>
         <SearchBar
@@ -204,9 +208,10 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                   <label>Cantidad</label>
                   <input
                     type='number'
+                    required
                     className={`border rounded-md p-2 'border-gray-300'}`}
                     value={cantidad}
-                    onChange={(e) => setCantidad(+e.target.value)}
+                    onChange={(e) => setCantidad(e.target.value)}
                     min={1}
                   />
                   {proveedorArticuloSeleccionado.modelo_seleccionado ===
@@ -225,7 +230,7 @@ export const CrearOrdenCompra = ({ modalRef }) => {
                       <span className='font-semibold'>
                         Cantidad recomendada por modelo de intervalo fijo:
                       </span>{' '}
-                      {cantidad}
+                      {cantidadRecomendada}
                     </p>
                   )}
                 </div>
@@ -251,9 +256,9 @@ export const CrearOrdenCompra = ({ modalRef }) => {
           )
         )}
       </div>
-      <ButtonLayout type='button' onClick={handleGenerarOrden}>
+      <ButtonLayout type='submit'>
         Generar Orden
       </ButtonLayout>
-    </div>
+    </form>
   )
 }
