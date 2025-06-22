@@ -65,7 +65,14 @@ const ListadoArticulos = () => {
     try {
       const response = await modificarArticulo(
         articuloToEdit.id_articulo,
-        articuloToEdit
+        {
+          ...articuloToEdit,
+          stock: +articuloToEdit.stock,
+          demanda_articulo: +articuloToEdit.demanda_articulo,
+          costo_almacenamiento: +articuloToEdit.costo_almacenamiento,
+          precioVenta: +articuloToEdit.precioVenta,
+          desviacion_est_dem: +articuloToEdit.desviacion_est_dem,
+        }
       )
 
       if (response.ok) {
