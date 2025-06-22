@@ -112,7 +112,7 @@ const ListadoArticulos = () => {
       incrementUpdateKey()
     } else {
       const error = await response.json()
-      toast.error(`Error: ${error.error}`)
+      toast.error(`Error: ${error[0].message || 'Error al crear el artículo'}`)
     }
   }
 
@@ -226,10 +226,12 @@ const ListadoArticulos = () => {
               min={0}
             />
 
-            <label htmlFor='desviacion_est_dem'>Desviación Estandar de la Demanda</label>
+            <label htmlFor='desviacion_est_dem'>
+              Desviación Estandar de la Demanda
+            </label>
             <input
               type='float'
-              step="any"
+              step='any'
               id='desviacion_est_dem'
               name='desviacion_est_dem'
               className='border border-gray-300 rounded-lg p-2'
@@ -284,7 +286,7 @@ const ListadoArticulos = () => {
             'precioVenta',
             'demanda_articulo',
             'costo_almacenamiento',
-            'desviacion_est_dem'
+            'desviacion_est_dem',
           ]}
           actions={actions}
         />

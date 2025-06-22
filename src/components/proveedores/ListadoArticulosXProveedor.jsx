@@ -212,12 +212,17 @@ const ListadoArticulosXProveedor = () => {
         ? parseInt(periodoRevision)
         : null
     }
-    console.log('nuevoArticulo', nuevoArticulo)
     const response = await crearArticuloProveedor(nuevoArticulo)
     if (response.ok) {
+      const { predeterminado_por_defecto } = await response.json()
       toast.success('Relación agregada correctamente')
       incrementUpdateKey()
       cerrarModalAgregarArticulo()
+      if (predeterminado_por_defecto) {
+        toast.info(
+          'El proveedor ha sido marcado como predeterminado debido a que es el primer proveedor registrado para éste artículo.'
+        )
+      }
     } else {
       const data = await response.json()
       toast.error(data.error || 'Error al agregar la relación')
@@ -324,9 +329,7 @@ const ListadoArticulosXProveedor = () => {
                 <option value='No'>No</option>
               </select>
 
-              <label htmlFor='nivel_servicio'>
-                Nivel de Servicio
-              </label>
+              <label htmlFor='nivel_servicio'>Nivel de Servicio</label>
               <select
                 id='nivel_servicio'
                 name='nivel_servicio'
@@ -377,7 +380,9 @@ const ListadoArticulosXProveedor = () => {
                 required
                 min={0}
               />
-              <label htmlFor='demora_entrega'>Demora de entrega (en días)</label>
+              <label htmlFor='demora_entrega'>
+                Demora de entrega (en días)
+              </label>
               <input
                 type='number'
                 id='demora_entrega'
@@ -397,7 +402,7 @@ const ListadoArticulosXProveedor = () => {
                 required
                 min={1}
               />
-              
+
               <div className='flex justify-around mt-4'>
                 <ButtonLayout
                   onClick={cerrarModalEditarArticulo}
@@ -498,9 +503,7 @@ const ListadoArticulosXProveedor = () => {
               <option value='false'>No</option>
             </select>
 
-            <label htmlFor='nivel_servicio'>
-              Nivel de Servicio
-            </label>
+            <label htmlFor='nivel_servicio'>Nivel de Servicio</label>
             <select
               id='nivel_servicio'
               name='nivel_servicio'
@@ -567,7 +570,7 @@ const ListadoArticulosXProveedor = () => {
               required
               min={1}
             />
-            
+
             <div className='flex justify-around mt-4'>
               <ButtonLayout
                 onClick={cerrarModalAgregarArticulo}

@@ -109,9 +109,15 @@ const CrearProveedor = ({ modalRef }) => {
       modalRef.current?.close()
       incrementUpdateKey() // Actualizar la clave para forzar la recarga de datos
       toast.success('Proveedor creado correctamente')
+      const { articulos_predeterminado_por_defecto } = await response.json()
+      if (articulos_predeterminado_por_defecto) {
+        toast.info(
+          `Se ha establecido al proveedor como predeterminado por defecto para los artículos: ${articulos_predeterminado_por_defecto}`
+        )
+      }
     } else {
       const error = await response.json()
-      toast.error(`Error: ${error.error}`)
+      toast.error(`${error.message || 'Error al crear el proveedor'}`)
     }
   }
 
