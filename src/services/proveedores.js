@@ -1,44 +1,57 @@
 export const crearProveedor = async (proveedor) => {
-  const URL = import.meta.env.VITE_BACKEND_URL
-  const url = `${URL}api/proveedores/crear-proveedor`
+  const URL = import.meta.env.VITE_BACKEND_URL;
+  const url = `${URL}api/proveedores/crear-proveedor`;
 
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(proveedor),
-  })
+  });
 
-  return response
-}
+  return response;
+};
 
 export const obtenerProveedores = async () => {
-  const URL = import.meta.env.VITE_BACKEND_URL
-  const url = `${URL}api/proveedores/obtener-proveedores`
+  const URL = import.meta.env.VITE_BACKEND_URL;
+  const url = `${URL}api/proveedores/obtener-proveedores`;
 
   const response = await fetch(url, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-  })
+  });
 
-  const data = await response.json()
+  const data = await response.json();
 
-  return data
-}
+  return data;
+};
 
 export const eliminarProveedor = async (idProveedor) => {
-  const URL = import.meta.env.VITE_BACKEND_URL
-  const url = `${URL}api/proveedores/eliminar-proveedor?id_proveedor=${idProveedor}`
+  const URL = import.meta.env.VITE_BACKEND_URL;
+  const url = `${URL}api/proveedores/eliminar-proveedor?id_proveedor=${idProveedor}`;
 
   const response = await fetch(url, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-  })
+  });
 
-  return response
-}
+  return response;
+};
+
+export const modificarProveedor = async (idProveedor, proveedorModificado) => {
+  const URL = import.meta.env.VITE_BACKEND_URL;
+  const url = `${URL}api/proveedores/modificar-proveedor/${idProveedor}`;
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(proveedorModificado),
+  });
+
+  return response;
+};
