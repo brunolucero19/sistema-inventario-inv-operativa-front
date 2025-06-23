@@ -5,23 +5,26 @@ import {
 import ButtonLayout from '../ui/ButtonLayout'
 import Modal from '../ui/Modal'
 import { useFetchData } from '../../hooks/useFetchData'
-import { TrashIcon } from 'lucide-react'
+import { Edit, TrashIcon } from 'lucide-react'
 import Tabla from '../ui/Tabla'
 import { useUpdateKeyStore } from '../../hooks/useStore'
 import { useRef, useState } from 'react'
 import CrearProveedor from './CrearProveedor'
 import { obtenerArticulos } from '../../services/articulos'
 import { toast } from 'react-toastify'
+import ModificarProveedor from './ModificarProveedor'
 
 const ListadoProveedores = () => {
   const modalRef = useRef()
   const modalEliminarProveedorRef = useRef()
+  const modalActualizarProveedorRef = useRef()
 
   const { updateKey, incrementUpdateKey } = useUpdateKeyStore()
   const { data: proveedores } = useFetchData(obtenerProveedores, [updateKey])
   const { data: articulos } = useFetchData(obtenerArticulos)
 
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null)
+  const [proveedorAModificar, setProveedorAModificar] = useState(null)
 
   const abrirModalEliminarProveedor = (row) => {
     setProveedorAEliminar(row)
@@ -31,6 +34,16 @@ const ListadoProveedores = () => {
   const cerrarModalEliminarProveedor = () => {
     modalEliminarProveedorRef.current?.close()
     setProveedorAEliminar(null)
+  }
+
+  const abrirModalModificarProveedor = (row) => {
+    setProveedorAModificar(row)
+    modalActualizarProveedorRef.current?.show()
+  }
+
+  const cerrarModalModificarProveedor = () => {
+    modalActualizarProveedorRef.current?.close()
+    setProveedorAModificar(null)
   }
 
   const eliminarProveedorSeleccionado = async () => {
@@ -53,6 +66,10 @@ const ListadoProveedores = () => {
 
   // Acciones de la tabla de proveedores
   const actions = [
+    {
+      icon: <Edit className='w-5 h-5 text-blue-600' />,
+      onClick: (row) => abrirModalModificarProveedor(row),
+    },
     {
       icon: <TrashIcon className='w-5 h-5 text-red-600' />,
       onClick: (row) => abrirModalEliminarProveedor(row),
@@ -101,6 +118,14 @@ const ListadoProveedores = () => {
             Eliminar
           </ButtonLayout>
         </div>
+      </Modal>
+      <Modal modalRef={modalActualizarProveedorRef}>
+        <ModificarProveedor
+          proveedor={proveedorAModificar}
+          setProveedor={setProveedorAModificar}
+          handleUpdate={incrementUpdateKey}
+          handleCancel={cerrarModalModificarProveedor}
+        />
       </Modal>
     </div>
   )
